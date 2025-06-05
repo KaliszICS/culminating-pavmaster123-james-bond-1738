@@ -1,9 +1,8 @@
+// idk about this name
 public class Thing{
     protected Position position;
     protected double sizeX;
     protected double sizeY;
-    protected double speedX;
-    protected double speedY;
 
     public Thing(Position position, double sizeX, double sizeY){
         this.position = position;

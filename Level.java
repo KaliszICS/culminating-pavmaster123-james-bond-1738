@@ -24,20 +24,20 @@ public class Level implements Displayable{
 
     @Override
     public void render(Graphics2D g, int width, int height){
-        double spaceScale = space.getCamera().getScale();
+        double zoom = space.getCamera().getZoom();
         Position cameraPosition = space.getCamera().getPosition();
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, width, height);
         g.setColor(Color.WHITE);
-        drawThing(g, space.getPlayer(), cameraPosition, spaceScale, width, height);
+        drawThing(g, space.getPlayer(), cameraPosition, zoom, width, height);
         for(Thing thing : space.things){
-            drawThing(g, thing, cameraPosition, spaceScale, width, height);
+            drawThing(g, thing, cameraPosition, zoom, width, height);
         }
         g.setFont(new Font("TimesRoman", Font.ITALIC, 12));
         g.setColor(Color.WHITE);
         g.drawString(space.getCamera().getLocation(), 50, 50);
         g.drawString(space.getPlayer().getLocation(), 50, 100);
-        g.drawString(String.format("Zoom: %.1f", spaceScale), 50, 150);
+        g.drawString(String.format("Zoom: %.1f", zoom), 50, 150);
         g.drawString("Feedback: " + feedback, 50, 200);
     }
 

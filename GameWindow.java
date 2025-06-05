@@ -49,8 +49,8 @@ public class GameWindow extends Frame implements KeyListener, MouseListener, Mou
             buffer = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_ARGB);
         }
         Graphics2D bufferG = buffer.createGraphics();
-        //this.level.render(bufferG, getWidth(), getHeight());
-        this.menu.render(bufferG, getWidth(), getHeight());
+        this.level.render(bufferG, getWidth(), getHeight());
+        //this.menu.render(bufferG, getWidth(), getHeight());
         bufferG.dispose();
         g.drawImage(buffer, 0, 0, this);
     }

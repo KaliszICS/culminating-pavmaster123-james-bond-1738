@@ -11,6 +11,13 @@ public class Space{
         this.things = new ArrayList<Thing>();
     }
 
+    public void update(){
+        this.player.update();
+        for(int i = 0; i < things.size(); i++){
+            this.player.collide(things.get(i));
+        }
+    }
+
     public Camera getCamera(){
         return this.camera;
     }

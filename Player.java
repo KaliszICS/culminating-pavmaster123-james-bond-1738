@@ -1,14 +1,64 @@
+/**
+ * The Player class, is a Thing that is able to move.
+ * @author Pavarasan Karunainathan
+ */
 public class Player extends Thing{
-    private static final double MOVEMENT_SPEED = 0.5;
+    private static final double MOVEMENT_SPEED = 0.35;
     private static final double JUMP_SPEED = 0.35;
     private static final double GRAVITY = 0.01;
     private boolean canJump;
-    
+    private double speedX;
+    private double speedY;
+
+    private class Collision{
+        public static final int NO_COLLISION = 0;
+        public static final int BOTH = 1;
+        public static final int START = 2;
+        public static final int END = 3;
+
+        private double amount;
+        private int type;
+
+        public Collision(double amount, int type){
+            this.amount = amount;
+            this.type = type;
+        }
+
+        public void flipType(){
+            if(this.type == START){
+                this.type = END;
+            }else if(this.type == END){
+                this.type = START;
+            }
+        }
+
+        public int getCollisionType(){
+            return this.type;
+        }
+
+        public double getCollisionAmount(){
+            return this.amount;
+        }
+    }
+
+    /**
+     * Constructor of the Player class.
+     * @param position The initial position of the Player.
+     * @param sizeX The horizontal size of the Player.
+     * @param sizeY The vertical size of the Player.
+     */
     public Player(Position position, double sizeX, double sizeY){
         super(position, sizeX, sizeY);
         this.canJump = false;
+        this.speedX = 0;
+        this.speedY = 0;
     }
     
+
+    /**
+     * Updates the position and velocity of the Player.
+     * Is called every game tick (1/TICKS_PER_SECOND).
+     */
     public void update(){
         this.position.move(this.speedX, this.speedY);
         if(this.position.getY() < 0){ // ensure Y >= 0
@@ -19,26 +69,128 @@ public class Player extends Thing{
         }
     }
 
+    private Collision between(double aPos, double aSize, double bPos, double bSize){
+        boolean bStart = aPos-aSize/2 < bPos-bSize/2 && bPos-bSize/2 < aPos+aSize/2;
+        boolean bEnd = aPos-aSize/2 < bPos+bSize/2 && bPos+bSize/2 < aPos+aSize/2;
+        if(bStart && bEnd){
+            return new Collision(bSize, Collision.BOTH);
+        }else if(bStart){
+            return new Collision((aPos+aSize/2) - (bPos-bSize/2), Collision.START);
+        }else if(bEnd){
+            return new Collision((bPos+bSize/2) - (aPos-aSize/2), Collision.END);
+        }else{
+            return new Collision(0, Collision.NO_COLLISION);
+        }
+    }
+
+
+    /**
+     * Detects and acts on a collision with another object.
+     * @param other The other object to collide with.
+     */
+    public void collide(Thing other){ // smaller objects dont work; fix
+        // check X
+        Collision X = between(other.position.getX(), other.sizeX, this.position.getX(), this.sizeX);
+
+        // check Y
+        Collision Y = between(other.position.getY(), other.sizeY, this.position.getY(), this.sizeY);
+        
+        int collisionTypeX = X.getCollisionType();
+        int collisionTypeY = Y.getCollisionType();
+        if(collisionTypeX == Collision.NO_COLLISION || collisionTypeY == Collision.NO_COLLISION){
+            X = between(this.position.getX(), this.sizeX, other.position.getX(), other.sizeX);
+            Y = between(this.position.getY(), this.sizeY, other.position.getY(), other.sizeY);
+            X.flipType();
+            Y.flipType();
+            collisionTypeX = X.getCollisionType();
+            collisionTypeY = Y.getCollisionType();
+            if(collisionTypeX == Collision.NO_COLLISION || collisionTypeY == Collision.NO_COLLISION){
+                return;
+            }
+        }
+        boolean Xoverride = X.getCollisionAmount() > Y.getCollisionAmount();
+        if(collisionTypeY == Collision.BOTH){
+            this.speedX = 0;
+            if(collisionTypeX == Collision.END){
+                this.position.setX(other.position.getX()-other.sizeX/2-this.sizeX/2);
+            }else if(collisionTypeX == Collision.START){
+                this.position.setX(other.position.getX()+other.sizeX/2+this.sizeX/2);
+            }
+        }else if(collisionTypeX == Collision.BOTH){
+            this.speedY = 0;
+            if(collisionTypeY == Collision.END){
+                this.position.setY(other.position.getY()-other.sizeY/2-this.sizeY/2);
+            }else if(collisionTypeY == Collision.START){
+                this.canJump = true;
+                this.position.setY(other.position.getY()+other.sizeY/2+this.sizeY/2);
+            }
+        }else if(collisionTypeX == Collision.START){
+            if(Xoverride){
+                this.speedY = 0;
+                if(collisionTypeY == Collision.END){
+                    this.position.setY(other.position.getY()-other.sizeY/2-this.sizeY/2);
+                }else if(collisionTypeY == Collision.START){
+                    this.canJump = true;
+                    this.position.setY(other.position.getY()+other.sizeY/2+this.sizeY/2);
+                }
+            }else{
+                this.speedX = 0;
+                this.position.setX(other.position.getX()+other.sizeX/2+this.sizeX/2);
+            }
+        }else if(collisionTypeX == Collision.END){
+            if(Xoverride){
+                this.speedY = 0;
+                if(collisionTypeY == Collision.END){
+                    this.position.setY(other.position.getY()-other.sizeY/2-this.sizeY/2);
+                }else if(collisionTypeY == Collision.START){
+                    this.canJump = true;
+                    this.position.setY(other.position.getY()+other.sizeY/2+this.sizeY/2);
+                }
+            }else{
+                this.speedX = 0;
+                this.position.setX(other.position.getX()-other.sizeX/2-this.sizeX/2);
+            }
+        }
+    }
+
+    /**
+     * Sets the Player's horizontal velocity to go in the negative X-direction.
+     */
     public void goLeft(){
         this.speedX = -MOVEMENT_SPEED;
     }
 
+    /**
+     * Sets the Player's horizontal velocity to go in the positive X-direction.
+     */
     public void goRight(){
         this.speedX = MOVEMENT_SPEED;
     }
 
+    /**
+     * If the Player is currently moving left,
+     * stops the Player from moving to the left
+     */
     public void stopLeft(){
         if(this.speedX == -MOVEMENT_SPEED){
             this.speedX = 0;
         }
     }
 
+    /**
+     * If the Player is currently moving right,
+     * stops the Player from moving to the right
+     */
     public void stopRight(){
         if(this.speedX == MOVEMENT_SPEED){
             this.speedX = 0;
         }
     }
 
+    /**
+     * Will make the Player "jump"
+     * Will only jump if the Player is on a surface.
+     */
     public void jump(){
         if(this.canJump){
             this.speedY = JUMP_SPEED;
@@ -46,14 +198,26 @@ public class Player extends Thing{
         }
     }
 
+    /**
+     * Sets the Player's horizontal speed.
+     * @param speedX The speed to set the horizontal speed at.
+     */
     public void setSpeedX(double speedX){
         this.speedX = speedX;
     }
 
+    /**
+     * Sets the Player's vertical speed.
+     * @param speedY The speed to set the vertical speed at.
+     */
     public void setSpeedY(double speedY){
         this.speedY = speedY;
     }
 
+    /**
+     * Gets the Player's location, in the format "Player - X: <X>, Y: <Y>".
+     * @return The Player's location, in String form.
+     */
     public String getLocation(){
         return String.format("Player - X: %.3f, Y: %.3f", getPosition().getX(), getPosition().getY());
     }
