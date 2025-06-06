@@ -9,9 +9,9 @@ public class SettingsMenu implements Displayable {
     private Button backButton;
     private Button volumeUpButton;
     private Button volumeDownButton;
-    private Button difficultyButton;
+    private Button CharacterButton;
     private int volume = 50; // 0-100
-    private String difficulty = "Normal"; // Easy, Normal, Hard
+    private String Character = "Kalisz"; 
 
     public SettingsMenu(int width, int height) {
         int buttonWidth = width / 4;
@@ -33,7 +33,7 @@ public class SettingsMenu implements Displayable {
             buttonHeight);
 
         // Create difficulty button
-        difficultyButton = new Button("Difficulty: " + difficulty, 
+        CharacterButton = new Button("Character: " + Character, 
             width/2 - buttonWidth/2, 
             startY + (buttonHeight + buttonSpacing) * 2,
             buttonWidth, 
@@ -68,7 +68,7 @@ public class SettingsMenu implements Displayable {
         // Draw buttons
         volumeUpButton.render(g);
         volumeDownButton.render(g);
-        difficultyButton.render(g);
+        CharacterButton.render(g);
         backButton.render(g);
     }
 
@@ -79,19 +79,22 @@ public class SettingsMenu implements Displayable {
         } else if (volumeDownButton.checkHovered(e.getX(), e.getY())) {
             volume = Math.max(0, volume - 10);
             GameState.getWindow().repaint();
-        } else if (difficultyButton.checkHovered(e.getX(), e.getY())) {
-            switch (difficulty) {
-                case "Easy":
-                    difficulty = "Normal";
+        } else if (CharacterButton.checkHovered(e.getX(), e.getY())) {
+            switch (Character) {
+                case "Kalisz":
+                    Character = "Kalisz";
                     break;
-                case "Normal":
-                    difficulty = "Hard";
+                case "Cheung":
+                    Character = "Cheung";
                     break;
-                case "Hard":
-                    difficulty = "Easy";
+                case "Marr":
+                    Character = "Marr";
+                    break;
+                case "Ong":
+                    Character = "Ong";
                     break;
             }
-            difficultyButton.setText("Difficulty: " + difficulty);
+            CharacterButton.setText("Character: " + Character);
             GameState.getWindow().repaint();
         } else if (backButton.checkHovered(e.getX(), e.getY())) {
             GameState.setCurrentScreen(GameState.Screen.MAIN_MENU);
@@ -113,9 +116,9 @@ public class SettingsMenu implements Displayable {
             anyHoverChanged = true;
         }
         
-        boolean difficultyHovered = difficultyButton.checkHovered(e.getX(), e.getY());
-        if (difficultyButton.isHovered() != difficultyHovered) {
-            difficultyButton.setHovered(difficultyHovered);
+        boolean CharacterHovered = CharacterButton.checkHovered(e.getX(), e.getY());
+        if (CharacterButton.isHovered() != CharacterHovered) {
+            CharacterButton.setHovered(CharacterHovered);
             anyHoverChanged = true;
         }
         

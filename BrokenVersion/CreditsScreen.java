@@ -11,14 +11,15 @@ public class CreditsScreen implements Displayable {
         "Super Kalisz World",
         "",
         "Created by:",
-        "Your Name",
+        "Levon Alexanian, Pavarasan Karunainathan, and Wayne Bai",
         "",
         "Special Thanks to:",
-        "My Family",
-        "My Friends",
-        "My Teachers",
+        "Tung Tung Tung Sahoor",
+        "David Blaine",
+        "Hatsune Miku",
+        "Optimus Prime",
         "",
-        "© 2024 All Rights Reserved"
+        "© 2025 All Rights Reserved"
     };
 
     public CreditsScreen(int width, int height) {
@@ -28,7 +29,7 @@ public class CreditsScreen implements Displayable {
         // Create back button at the bottom
         backButton = new Button("Back", 
             width/2 - buttonWidth/2, 
-            height - buttonHeight - 20,
+            height - buttonHeight - 100,
             buttonWidth, 
             buttonHeight);
     }
