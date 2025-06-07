@@ -4,8 +4,8 @@
  */
 public class Player extends Thing{
     private static final double MOVEMENT_SPEED = 0.35;
-    private static final double JUMP_SPEED = 0.35;
-    private static final double GRAVITY = 0.01;
+    private static final double JUMP_SPEED = 0.5;
+    private static final double GRAVITY = 0.05;
     private boolean canJump;
     private double speedX;
     private double speedY;
@@ -69,6 +69,30 @@ public class Player extends Thing{
         }
     }
 
+    public void updateXOnTime(double time){
+        this.position.moveX(this.speedX);
+        this.position.moveY(this.speedY*time);
+        this.speedY = 0;
+        if(this.position.getY() < 0){ // ensure Y >= 0
+            this.position.setY(0);
+            this.canJump = true;
+        }else{
+            this.speedY -= GRAVITY;
+        }
+    }
+
+    public void updateYOnTime(double time){
+        this.position.moveX(this.speedX*time);
+        this.speedX = 0;
+        this.position.moveY(this.speedY);
+        if(this.position.getY() < 0){ // ensure Y >= 0
+            this.position.setY(0);
+            this.canJump = true;
+        }else{
+            this.speedY -= GRAVITY;
+        }
+    }
+
     private Collision between(double aPos, double aSize, double bPos, double bSize){
         boolean bStart = aPos-aSize/2 < bPos-bSize/2 && bPos-bSize/2 < aPos+aSize/2;
         boolean bEnd = aPos-aSize/2 < bPos+bSize/2 && bPos+bSize/2 < aPos+aSize/2;
@@ -82,7 +106,6 @@ public class Player extends Thing{
             return new Collision(0, Collision.NO_COLLISION);
         }
     }
-
 
     /**
      * Detects and acts on a collision with another object.
@@ -151,6 +174,71 @@ public class Player extends Thing{
                 this.position.setX(other.position.getX()-other.sizeX/2-this.sizeX/2);
             }
         }
+    }
+
+    public CollisionUpdate moveCollide(Thing other){
+        if(speedX > 0){ // going to the right
+            double thisRight = this.position.getX() + this.sizeX/2;
+            double otherLeft = other.position.getX() - other.sizeX/2;
+            double time = (otherLeft - thisRight)/this.speedX;
+            if(time >= 0 && time < 1){
+                double newY = this.position.getY() + time * this.speedY;
+                Collision yCollision = between(newY, this.sizeY, other.position.getY(), other.sizeY);
+                if(yCollision.getCollisionType() == Collision.NO_COLLISION){
+                    yCollision = between(other.position.getY(), other.sizeY, newY, this.sizeY);
+                }
+                if(yCollision.getCollisionType() != Collision.NO_COLLISION){
+                    return new CollisionUpdate(time, CollisionUpdate.UPDATE_Y);
+                }
+            }
+        }else if(speedX < 0){ // going to the left
+            double thisLeft = this.position.getX() - this.sizeX/2;
+            double otherRight = other.position.getX() + other.sizeX/2;
+            double time = (thisLeft - otherRight)/-this.speedX;
+            if(time >= 0 && time < 1){
+                double newY = this.position.getY() + time * this.speedY;
+                Collision yCollision = between(newY, this.sizeY, other.position.getY(), other.sizeY);
+                if(yCollision.getCollisionType() == Collision.NO_COLLISION){
+                    yCollision = between(other.position.getY(), other.sizeY, newY, this.sizeY);
+                }
+                if(yCollision.getCollisionType() != Collision.NO_COLLISION){
+                    return new CollisionUpdate(time, CollisionUpdate.UPDATE_Y);
+                }
+            }
+        }
+
+        if(speedY > 0){ // going up
+            double thisUp = this.position.getY() + this.sizeY/2;
+            double otherDown = other.position.getY() - other.sizeY/2;
+            double time = (otherDown - thisUp)/this.speedY;
+            if(time >= 0 && time < 1){
+                double newX = this.position.getX() + time * this.speedX;
+                Collision xCollision = between(newX, this.sizeX, other.position.getX(), other.sizeX);
+                if(xCollision.getCollisionType() == Collision.NO_COLLISION){
+                    xCollision = between(other.position.getX(), other.sizeX, newX, this.sizeX);
+                }
+                if(xCollision.getCollisionType() != Collision.NO_COLLISION){
+                    return new CollisionUpdate(time, CollisionUpdate.UPDATE_X);
+                }
+            }
+        }else if(speedY < 0){ // going down
+            double thisDown = this.position.getY() - this.sizeY/2;
+            double otherUp = other.position.getY() + other.sizeY/2;
+            double time = (thisDown - otherUp)/-this.speedY;
+            if(time >= 0 && time < 1){
+                double newX = this.position.getX() + time * this.speedX;
+                Collision xCollision = between(newX, this.sizeX, other.position.getX(), other.sizeX);
+                if(xCollision.getCollisionType() == Collision.NO_COLLISION){
+                    xCollision = between(other.position.getX(), other.sizeX, newX, this.sizeX);
+                }
+                if(xCollision.getCollisionType() != Collision.NO_COLLISION){
+                    this.canJump = true;
+                    this.speedY = 0;
+                    return new CollisionUpdate(time, CollisionUpdate.UPDATE_X);
+                }
+            }
+        }
+        return new CollisionUpdate(1, CollisionUpdate.UPDATE_BOTH);
     }
 
     /**

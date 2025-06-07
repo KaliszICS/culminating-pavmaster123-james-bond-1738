@@ -8,18 +8,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 
-public class GameWindow extends Frame implements KeyListener, MouseListener, MouseWheelListener, MouseMotionListener{
-    private Level level;
-    private MainMenu menu;
+public class GameWindow extends Frame implements KeyListener, MouseListener, MouseMotionListener{
+    //private Level level;
+    //private MainMenu menu;
+    private Displayable currentDisplay;
     private BufferedImage buffer;
     
-    public GameWindow(Level level){
-        this.level = level;
+    public GameWindow(){
         setSize(1920, 1080);
         setResizable(true);
         setTitle("ASSESSMENT EVALUATION");
@@ -31,10 +29,9 @@ public class GameWindow extends Frame implements KeyListener, MouseListener, Mou
         });
         setBackground(Color.BLACK);
         addKeyListener(this);
-        addMouseWheelListener(this);
         addMouseListener(this);
+        addMouseMotionListener(this);
         buffer = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_ARGB);
-        this.menu = new MainMenu();
         setVisible(true);
     }
 
@@ -49,33 +46,52 @@ public class GameWindow extends Frame implements KeyListener, MouseListener, Mou
             buffer = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_ARGB);
         }
         Graphics2D bufferG = buffer.createGraphics();
-        this.level.render(bufferG, getWidth(), getHeight());
-        //this.menu.render(bufferG, getWidth(), getHeight());
+        this.currentDisplay.render(bufferG, getWidth(), getHeight());
         bufferG.dispose();
         g.drawImage(buffer, 0, 0, this);
     }
 
-    public void setFeedback(String feedback) {
-        this.level.setFeedback(feedback);
+    public void setDisplay(Displayable display){
+        this.currentDisplay = display;
     }
 
     public void keyPressed(KeyEvent e){
-        this.level.keyPressed(e);
+        this.currentDisplay.keyPressed(e);
     }
 
     public void keyReleased(KeyEvent e){
-        this.level.keyReleased(e);
+        this.currentDisplay.keyReleased(e);
     }
     
-    public void keyTyped(KeyEvent e){}
-    public void mouseExited(MouseEvent e){}
-    public void mouseReleased(MouseEvent e){}
-    public void mouseClicked(MouseEvent e){}
-    public void mousePressed(MouseEvent e){}
-    public void mouseEntered(MouseEvent e){}
-    public void mouseDragged(MouseEvent e){}
-    public void mouseMoved(MouseEvent e){
-        this.menu.mouseMoved(e);
+    public void keyTyped(KeyEvent e){
+        this.currentDisplay.keyTyped(e);
     }
-    public void mouseWheelMoved(MouseWheelEvent e){}
+    
+    public void mouseExited(MouseEvent e){
+        this.currentDisplay.mouseExited(e);
+    }
+    
+    public void mouseReleased(MouseEvent e){
+        this.currentDisplay.mouseReleased(e);
+    }
+
+    public void mouseClicked(MouseEvent e){
+        this.currentDisplay.mouseClicked(e);
+    }
+
+    public void mousePressed(MouseEvent e){
+        this.currentDisplay.mousePressed(e);
+    }
+    
+    public void mouseEntered(MouseEvent e){
+        this.currentDisplay.mouseEntered(e);
+    }
+
+    public void mouseDragged(MouseEvent e){
+        this.currentDisplay.mouseDragged(e);
+    }
+
+    public void mouseMoved(MouseEvent e){
+        this.currentDisplay.mouseMoved(e);
+    }
 }

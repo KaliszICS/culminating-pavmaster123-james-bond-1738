@@ -15,7 +15,7 @@ public class Camera{
     public Camera(Player subject){
         this.subject = subject;
         moveTo(this.subject.getPosition());
-        this.scale = 1;
+        this.zoom = 1;
     }
 
     /**

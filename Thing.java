@@ -1,4 +1,3 @@
-// idk about this name
 public class Thing{
     protected Position position;
     protected double sizeX;

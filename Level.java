@@ -4,13 +4,29 @@ import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-public class Level implements Displayable{
+public abstract class Level implements Displayable{
     private int pixelsPerUnit = 20;
     private String feedback = "null";
-    private Space space;
+    protected Space space;
+    protected Player player;
+    private Camera camera;
 
-    public Level(Space space){
-        this.space = space;
+    public Level(){
+        this.player = new Player(new Position(0, 0), 1, 1);
+        this.camera = new Camera(this.player);
+        this.space = new Space(this.player, this.camera);
+    }
+
+    protected abstract void initialiseLevel();
+    /*{
+        for(int i = 0; i < 500; i++){
+            Thing thing = new Thing(new Position(20 + ((double) i)  * (0.5 + Math.random()), ((double) i) * 0.5+1),2, 0.1);
+            space.things.add(thing);
+        }
+    }*/
+
+    public void update(){
+        this.space.update();
     }
     
     private void drawThing(Graphics2D g, Thing thing, Position cameraPosition, double scale, int width, int height){
@@ -24,19 +40,19 @@ public class Level implements Displayable{
 
     @Override
     public void render(Graphics2D g, int width, int height){
-        double zoom = space.getCamera().getZoom();
-        Position cameraPosition = space.getCamera().getPosition();
+        double zoom = this.camera.getZoom();
+        Position cameraPosition = this.camera.getPosition();
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, width, height);
         g.setColor(Color.WHITE);
-        drawThing(g, space.getPlayer(), cameraPosition, zoom, width, height);
-        for(Thing thing : space.things){
+        drawThing(g, this.player, cameraPosition, zoom, width, height);
+        for(Thing thing : this.space.things){
             drawThing(g, thing, cameraPosition, zoom, width, height);
         }
         g.setFont(new Font("TimesRoman", Font.ITALIC, 12));
         g.setColor(Color.WHITE);
-        g.drawString(space.getCamera().getLocation(), 50, 50);
-        g.drawString(space.getPlayer().getLocation(), 50, 100);
+        g.drawString(this.camera.getLocation(), 50, 50);
+        g.drawString(this.player.getLocation(), 50, 100);
         g.drawString(String.format("Zoom: %.1f", zoom), 50, 150);
         g.drawString("Feedback: " + feedback, 50, 200);
     }
@@ -48,15 +64,15 @@ public class Level implements Displayable{
     public void keyPressed(KeyEvent e){
         switch(e.getKeyCode()){
             case KeyEvent.VK_W:
-                this.space.getPlayer().jump();
+                this.player.jump();
                 break;
             case KeyEvent.VK_A:
-                this.space.getPlayer().goLeft();
+                this.player.goLeft();
                 break;
             case KeyEvent.VK_S:
                 break;
             case KeyEvent.VK_D:
-                this.space.getPlayer().goRight();
+                this.player.goRight();
                 break;
         }
     }
@@ -66,12 +82,12 @@ public class Level implements Displayable{
             case KeyEvent.VK_W:
                 break;
             case KeyEvent.VK_A:
-                this.space.getPlayer().stopLeft();
+                this.player.stopLeft();
                 break;
             case KeyEvent.VK_S:
                 break;
             case KeyEvent.VK_D:
-                this.space.getPlayer().stopRight();
+                this.player.stopRight();
                 break;
         }
     }

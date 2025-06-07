@@ -12,9 +12,18 @@ public class Space{
     }
 
     public void update(){
-        this.player.update();
+        CollisionUpdate collision = new CollisionUpdate(1, CollisionUpdate.UPDATE_BOTH);
         for(int i = 0; i < things.size(); i++){
             this.player.collide(things.get(i));
+            CollisionUpdate update = this.player.moveCollide(things.get(i));
+            collision.combine(update);
+        }
+        if(collision.getUpdateType() == CollisionUpdate.UPDATE_BOTH){
+            this.player.update();
+        }else if(collision.getUpdateType() == CollisionUpdate.UPDATE_X){
+            this.player.updateXOnTime(collision.getCollisionTime());
+        }else if(collision.getUpdateType() == CollisionUpdate.UPDATE_Y){
+            this.player.updateYOnTime(collision.getCollisionTime());
         }
     }
 

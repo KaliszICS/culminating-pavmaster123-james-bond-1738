@@ -58,6 +58,14 @@ public class Position{
         this.y = y;
     }
 
+    public void moveX(double x){
+        this.x += x;
+    }
+
+    public void moveY(double y){
+        this.y += y;
+    }
+
     /**
      * An Override of the toString() method.
      * Returns the Position in the format "X: <X>, Y: <Y>".
