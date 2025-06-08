@@ -94,8 +94,8 @@ public class Player extends Thing{
     }
 
     private Collision between(double aPos, double aSize, double bPos, double bSize){
-        boolean bStart = aPos-aSize/2 < bPos-bSize/2 && bPos-bSize/2 < aPos+aSize/2;
-        boolean bEnd = aPos-aSize/2 < bPos+bSize/2 && bPos+bSize/2 < aPos+aSize/2;
+        boolean bStart = aPos-aSize/2 <= bPos-bSize/2 && bPos-bSize/2 < aPos+aSize/2;
+        boolean bEnd = aPos-aSize/2 < bPos+bSize/2 && bPos+bSize/2 <= aPos+aSize/2;
         if(bStart && bEnd){
             return new Collision(bSize, Collision.BOTH);
         }else if(bStart){
