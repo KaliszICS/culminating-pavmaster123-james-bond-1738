@@ -1,14 +1,22 @@
+import java.awt.Color;
+
 /**
  * The Player class, is a Thing that is able to move.
  * @author Pavarasan Karunainathan
  */
 public class Player extends Thing{
-    private static final double MOVEMENT_SPEED = 0.35;
-    private static final double JUMP_SPEED = 0.5;
-    private static final double GRAVITY = 0.05;
+    private static final double MAX_MOVEMENT_SPEED = 0.25;
+    private static final double MIN_MOVEMENT_SPEED = 0.1;
+    private static final double JUMP_SPEED = 0.17;
+    private static final double GRAVITY = 0.01;
+    private static final double MOVEMENT_ACCELERATION = 0.01;
+    private static final Color DEFAULT_COLOUR = new Color(240, 240, 240);
+    private static final Color DIE_COLOUR = new Color(240, 120, 120);
     private boolean canJump;
     private double speedX;
     private double speedY;
+    private boolean goingLeft;
+    private boolean goingRight;
 
     private class Collision{
         public static final int NO_COLLISION = 0;
@@ -52,8 +60,20 @@ public class Player extends Thing{
         this.canJump = false;
         this.speedX = 0;
         this.speedY = 0;
+        this.colour = new Color(240, 240, 240);
+        this.goingLeft = false;
+        this.goingRight = false;
     }
     
+
+    public void respawn(){
+        this.colour = DIE_COLOUR;
+        this.canJump = false;
+        this.speedX = 0;
+        this.speedY = 0;
+        this.goingLeft = false;
+        this.goingRight = false;
+    }
 
     /**
      * Updates the position and velocity of the Player.
@@ -61,11 +81,21 @@ public class Player extends Thing{
      */
     public void update(){
         this.position.move(this.speedX, this.speedY);
-        if(this.position.getY() < 0){ // ensure Y >= 0
-            this.position.setY(0);
+        if(this.position.getY() < 0.5){ // ensure Y >= 0.5
+            this.position.setY(0.5);
             this.canJump = true;
         }else{
             this.speedY -= GRAVITY;
+        }
+
+        if(this.goingRight && this.speedX < MAX_MOVEMENT_SPEED){
+            this.speedX += MOVEMENT_ACCELERATION;
+        }else if(this.goingLeft && this.speedX > -MAX_MOVEMENT_SPEED){
+            this.speedX -= MOVEMENT_ACCELERATION;
+        }
+
+        if(this.colour.getGreen() != DEFAULT_COLOUR.getGreen()){
+            this.colour = new Color(240, this.colour.getGreen()+2, this.colour.getBlue()+2);
         }
     }
 
@@ -73,23 +103,49 @@ public class Player extends Thing{
         this.position.moveX(this.speedX);
         this.position.moveY(this.speedY*time);
         this.speedY = 0;
-        if(this.position.getY() < 0){ // ensure Y >= 0
-            this.position.setY(0);
+        if(this.position.getY() < 0.5){ // ensure Y >= 0.5
+            this.position.setY(0.5);
             this.canJump = true;
         }else{
             this.speedY -= GRAVITY;
+        }
+
+        if(this.goingRight && this.speedX < MAX_MOVEMENT_SPEED){
+            this.speedX += MOVEMENT_ACCELERATION;
+        }else if(this.goingLeft && this.speedX > -MAX_MOVEMENT_SPEED){
+            this.speedX -= MOVEMENT_ACCELERATION;
+        }
+
+        if(this.colour.getGreen() != DEFAULT_COLOUR.getGreen()){
+            this.colour = new Color(240, this.colour.getGreen()+2, this.colour.getBlue()+2);
         }
     }
 
     public void updateYOnTime(double time){
         this.position.moveX(this.speedX*time);
-        this.speedX = 0;
+        if(this.goingRight){
+            this.speedX = MIN_MOVEMENT_SPEED;
+        }else if(this.goingLeft){
+            this.speedX = -MIN_MOVEMENT_SPEED;
+        }else{
+            this.speedX = 0;
+        }
         this.position.moveY(this.speedY);
-        if(this.position.getY() < 0){ // ensure Y >= 0
-            this.position.setY(0);
+        if(this.position.getY() < 0.5){ // ensure Y >= 0.5
+            this.position.setY(0.5);
             this.canJump = true;
         }else{
             this.speedY -= GRAVITY;
+        }
+
+        if(this.goingRight && this.speedX < MAX_MOVEMENT_SPEED){
+            this.speedX += MOVEMENT_ACCELERATION;
+        }else if(this.goingLeft && this.speedX > -MAX_MOVEMENT_SPEED){
+            this.speedX -= MOVEMENT_ACCELERATION;
+        }
+
+        if(this.colour.getGreen() != DEFAULT_COLOUR.getGreen()){
+            this.colour = new Color(240, this.colour.getGreen()+2, this.colour.getBlue()+2);
         }
     }
 
@@ -108,10 +164,10 @@ public class Player extends Thing{
     }
 
     /**
-     * Detects and acts on a collision with another object.
+     * Detects a collision with another object.
      * @param other The other object to collide with.
      */
-    public void collide(Thing other){ // smaller objects dont work; fix
+    public boolean collide(Thing other){
         // check X
         Collision X = between(other.position.getX(), other.sizeX, this.position.getX(), this.sizeX);
 
@@ -128,52 +184,10 @@ public class Player extends Thing{
             collisionTypeX = X.getCollisionType();
             collisionTypeY = Y.getCollisionType();
             if(collisionTypeX == Collision.NO_COLLISION || collisionTypeY == Collision.NO_COLLISION){
-                return;
+                return false;
             }
         }
-        boolean Xoverride = X.getCollisionAmount() > Y.getCollisionAmount();
-        if(collisionTypeY == Collision.BOTH){
-            this.speedX = 0;
-            if(collisionTypeX == Collision.END){
-                this.position.setX(other.position.getX()-other.sizeX/2-this.sizeX/2);
-            }else if(collisionTypeX == Collision.START){
-                this.position.setX(other.position.getX()+other.sizeX/2+this.sizeX/2);
-            }
-        }else if(collisionTypeX == Collision.BOTH){
-            this.speedY = 0;
-            if(collisionTypeY == Collision.END){
-                this.position.setY(other.position.getY()-other.sizeY/2-this.sizeY/2);
-            }else if(collisionTypeY == Collision.START){
-                this.canJump = true;
-                this.position.setY(other.position.getY()+other.sizeY/2+this.sizeY/2);
-            }
-        }else if(collisionTypeX == Collision.START){
-            if(Xoverride){
-                this.speedY = 0;
-                if(collisionTypeY == Collision.END){
-                    this.position.setY(other.position.getY()-other.sizeY/2-this.sizeY/2);
-                }else if(collisionTypeY == Collision.START){
-                    this.canJump = true;
-                    this.position.setY(other.position.getY()+other.sizeY/2+this.sizeY/2);
-                }
-            }else{
-                this.speedX = 0;
-                this.position.setX(other.position.getX()+other.sizeX/2+this.sizeX/2);
-            }
-        }else if(collisionTypeX == Collision.END){
-            if(Xoverride){
-                this.speedY = 0;
-                if(collisionTypeY == Collision.END){
-                    this.position.setY(other.position.getY()-other.sizeY/2-this.sizeY/2);
-                }else if(collisionTypeY == Collision.START){
-                    this.canJump = true;
-                    this.position.setY(other.position.getY()+other.sizeY/2+this.sizeY/2);
-                }
-            }else{
-                this.speedX = 0;
-                this.position.setX(other.position.getX()-other.sizeX/2-this.sizeX/2);
-            }
-        }
+        return true;
     }
 
     public CollisionUpdate moveCollide(Thing other){
@@ -225,7 +239,7 @@ public class Player extends Thing{
             double thisDown = this.position.getY() - this.sizeY/2;
             double otherUp = other.position.getY() + other.sizeY/2;
             double time = (thisDown - otherUp)/-this.speedY;
-            if(time >= 0 && time < 1){
+            if(time >= 0 && time <= 1){
                 double newX = this.position.getX() + time * this.speedX;
                 Collision xCollision = between(newX, this.sizeX, other.position.getX(), other.sizeX);
                 if(xCollision.getCollisionType() == Collision.NO_COLLISION){
@@ -235,6 +249,8 @@ public class Player extends Thing{
                     this.canJump = true;
                     this.speedY = 0;
                     return new CollisionUpdate(time, CollisionUpdate.UPDATE_X);
+                }else{
+                    this.canJump = false;
                 }
             }
         }
@@ -245,14 +261,20 @@ public class Player extends Thing{
      * Sets the Player's horizontal velocity to go in the negative X-direction.
      */
     public void goLeft(){
-        this.speedX = -MOVEMENT_SPEED;
+        if(!this.goingLeft){
+            this.speedX = -MIN_MOVEMENT_SPEED;
+            this.goingLeft = true;
+        }
     }
 
     /**
      * Sets the Player's horizontal velocity to go in the positive X-direction.
      */
     public void goRight(){
-        this.speedX = MOVEMENT_SPEED;
+        if(!this.goingRight){
+            this.speedX = MIN_MOVEMENT_SPEED;
+            this.goingRight = true;
+        }
     }
 
     /**
@@ -260,9 +282,10 @@ public class Player extends Thing{
      * stops the Player from moving to the left
      */
     public void stopLeft(){
-        if(this.speedX == -MOVEMENT_SPEED){
-            this.speedX = 0;
+        if(this.goingLeft){
+            this.speedX = this.goingRight ? MIN_MOVEMENT_SPEED : 0;
         }
+        this.goingLeft = false;
     }
 
     /**
@@ -270,9 +293,10 @@ public class Player extends Thing{
      * stops the Player from moving to the right
      */
     public void stopRight(){
-        if(this.speedX == MOVEMENT_SPEED){
-            this.speedX = 0;
+        if(this.goingRight){
+            this.speedX = this.goingLeft ? -MIN_MOVEMENT_SPEED : 0;
         }
+        this.goingRight = false;
     }
 
     /**
@@ -307,6 +331,6 @@ public class Player extends Thing{
      * @return The Player's location, in String form.
      */
     public String getLocation(){
-        return String.format("Player - X: %.3f, Y: %.3f", getPosition().getX(), getPosition().getY());
+        return String.format("Player - X: %.3f, Y: %.3f, Xspeed: %.3f", getPosition().getX(), getPosition().getY(), this.speedX);
     }
 }

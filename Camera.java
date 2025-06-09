@@ -7,6 +7,8 @@ public class Camera{
     private Player subject;
     private double zoom;
     private Position position;
+    private static final int PIXELS_PER_UNIT = 20;
+
 
     /**
      * The constructor of the Camera class.
@@ -14,7 +16,7 @@ public class Camera{
      */
     public Camera(Player subject){
         this.subject = subject;
-        moveTo(this.subject.getPosition());
+        this.position = subject.getPosition().clone();
         this.zoom = 1;
     }
 
@@ -22,15 +24,21 @@ public class Camera{
      * Updates the Camera Position.
      */
     public void update(){
-        moveTo(subject.getPosition());
+        double deltaX = this.subject.getPosition().getX() - this.position.getX();
+        this.position.moveX(deltaX*0.1);
+        this.position.setY(this.subject.getPosition().getY());
     }
 
     /**
      * Moves the Camera to a designated Position.
      * @param position The Position to move the Camera to.
      */
-    public void moveTo(Position position){
-        this.position = position;
+    public void setPosition(Position position){
+        this.position = position.clone();
+    }
+
+    public void moveToPlayer(){
+        setPosition(this.subject.getPosition());
     }
 
     /**
@@ -41,6 +49,10 @@ public class Camera{
         return this.zoom;
     }
 
+    public void setZoom(double zoom){
+        this.zoom = zoom;
+    }
+
     /**
      * Gets the Position of the Camera.
      * @return The Position of the Camera.
@@ -48,6 +60,19 @@ public class Camera{
     public Position getPosition(){
         return this.position;
     }
+
+    public int toScale(double x){
+        return (int)Math.round(x * PIXELS_PER_UNIT * this.zoom);
+    }
+
+    public int relativeToCameraX(double x){
+        return toScale(x - this.position.getX());
+    }
+
+    public int relativeToCameraY(double y){
+        return toScale(y - this.position.getY());
+    }
+
 
     /**
      * @return The Camera in String format.

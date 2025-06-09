@@ -18,7 +18,7 @@ public class GameState{
     public static void initialise(GameWindow gameWindow, Level level){
         window = gameWindow;
         levelScreen = level;
-        setCurrentScreen(Screen.GAME);
+        setCurrentScreen(Screen.MAIN_MENU);
     }
     
     public static void update(){
@@ -47,5 +47,15 @@ public class GameState{
             default:
                 return mainMenu;
         }
+    }
+
+    public static void setLevel(Level level){
+        levelScreen = level;
+    }
+
+    public static void levelComplete(){
+        window.setDisplay(new BlackScreenWithText("Level Complete!"));
+        long start = System.currentTimeMillis();
+        //while(System.currentTimeMillis() - start < 1000);
     }
 } 

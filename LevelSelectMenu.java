@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+
 import java.awt.GradientPaint;
 
 public class LevelSelectMenu implements Displayable{
@@ -50,12 +51,16 @@ public class LevelSelectMenu implements Displayable{
         }
         backButton.render(g);
     }
-
-    public void mouseClicked(MouseEvent e) {
-        for (int i = 0; i < NUM_LEVELS; i++) {
-            if (levelButtons[i].checkHovered(e.getX(), e.getY())) {
-                // TODO: Start the selected level
-                System.out.println("Level " + (i + 1) + " selected");
+    //    1      2    3    4     5       6     7      8     9      10    11
+    // public static void main(String[] args){System.out.println("Hello World!")}
+    public void mouseClicked(MouseEvent e){
+        for(int i = 0; i < NUM_LEVELS; i++){
+            if(levelButtons[i].checkHovered(e.getX(), e.getY())){
+                if(i == 0){
+                    GameState.setLevel(new LevelOne());
+                    GameState.setCurrentScreen(GameState.Screen.GAME);
+                    System.out.println("Level " + (i + 1) + " selected");
+                }
                 return;
             }
         }

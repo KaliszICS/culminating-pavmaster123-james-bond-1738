@@ -28,6 +28,7 @@ public class GameWindow extends Frame implements KeyListener, MouseListener, Mou
             }
         });
         setBackground(Color.BLACK);
+        setDisplay(new BlackScreenWithText("Loading..."));
         addKeyListener(this);
         addMouseListener(this);
         addMouseMotionListener(this);
