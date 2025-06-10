@@ -89,6 +89,10 @@ public class KdTree{
         if(node == null){
             return;
         }
+
+        System.out.print(node.getX());
+        System.out.print(" ");
+        System.out.println(node.getY());
         if(inRadius(toFind, node, searchRadius)){
             foundThings.add(node.getThing());
         }
@@ -117,6 +121,7 @@ public class KdTree{
     public ArrayList<Thing> search(Position position, double searchRadius){
         foundThings.clear();
         searchHelper(this.root, position, searchRadius, true);
+        System.out.println(foundThings.size());
         return foundThings;
     }
 

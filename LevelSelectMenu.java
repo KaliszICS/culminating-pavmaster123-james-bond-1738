@@ -6,11 +6,22 @@ import java.awt.event.MouseEvent;
 
 import java.awt.GradientPaint;
 
+/**
+ * A menu screen that allows players to select different game levels.
+ * @author Levon Alexanian
+ */
 public class LevelSelectMenu implements Displayable{
     private Button[] levelButtons;
     private Button backButton;
     private static final int NUM_LEVELS = 5;
 
+    /**
+     * Renders the level selection menu with a gradient background, title,
+     * level selection buttons, and a back button.
+     * @param g The Graphics2D context to render on
+     * @param width The width of the display area
+     * @param height The height of the display area
+     */
     @Override
     public void render(Graphics2D g, int width, int height) {
         int buttonWidth = width / 4;
@@ -51,16 +62,31 @@ public class LevelSelectMenu implements Displayable{
         }
         backButton.render(g);
     }
-    //    1      2    3    4     5       6     7      8     9      10    11
-    // public static void main(String[] args){System.out.println("Hello World!")}
+
+    /**
+     * Handles mouse click events on level buttons and the back button.
+     * When a level button is clicked, it loads the corresponding level.
+     * When the back button is clicked, it returns to the main menu.
+     * @param e The MouseEvent containing information about the click
+     */
     public void mouseClicked(MouseEvent e){
         for(int i = 0; i < NUM_LEVELS; i++){
             if(levelButtons[i].checkHovered(e.getX(), e.getY())){
-                if(i == 0){
-                    GameState.setLevel(new LevelOne());
-                    GameState.setCurrentScreen(GameState.Screen.GAME);
-                    System.out.println("Level " + (i + 1) + " selected");
+                switch(i){
+                    case 0:
+                        GameState.setLevel(new LevelOne());
+                        break;
+                    case 1:
+                        GameState.setLevel(new LevelTwo());
+                        break;
+                    case 2:
+                        GameState.setLevel(new LevelThree());
+                        break;
+                    default:
+                        break;
                 }
+                GameState.setCurrentScreen(GameState.Screen.GAME);
+                System.out.println("Level " + (i + 1) + " selected");
                 return;
             }
         }
@@ -70,6 +96,11 @@ public class LevelSelectMenu implements Displayable{
         }
     }
 
+    /**
+     * Handles mouse movement events to update button hover states.
+     * Updates the hover state for all level buttons and the back button.
+     * @param e The MouseEvent containing information about the mouse movement
+     */
     public void mouseMoved(MouseEvent e) {
         for (Button button : levelButtons) {
             boolean isHovered = button.checkHovered(e.getX(), e.getY());
@@ -84,7 +115,7 @@ public class LevelSelectMenu implements Displayable{
         }
     }
 
-    // Required interface methods
+
     public void keyPressed(KeyEvent e){}
     public void keyReleased(KeyEvent e){}
     public void keyTyped(KeyEvent e){}

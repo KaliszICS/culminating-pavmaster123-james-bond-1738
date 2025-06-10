@@ -6,11 +6,23 @@ import java.awt.event.MouseEvent;
 import java.awt.GradientPaint;
 import java.awt.geom.Rectangle2D;
 
+/**
+ * The main menu screen of the game.
+ * @author Levon Alexanian
+ */
 public class MainMenu implements Displayable{
     private Button playButton;
     private Button settingsButton;
     private Button creditsButton;
 
+    /**
+     * Renders the main menu with a nature-themed background and interactive buttons.
+     * Creates a sky gradient, grass, sun, and initializes the menu buttons if they haven't been created.
+     * Displays the game title and renders all interactive buttons.
+     * @param g The Graphics2D context to render on
+     * @param width The width of the display area
+     * @param height The height of the display area
+     */
     @Override
     public void render(Graphics2D g, int width, int height){
         // Draw nature-themed background
@@ -51,11 +63,15 @@ public class MainMenu implements Displayable{
         creditsButton.render(g);
     }
 
-    public void keyPressed(KeyEvent e){}
-    public void keyReleased(KeyEvent e){}
-    public void keyTyped(KeyEvent e){}
-    public void mouseExited(MouseEvent e){}
-    public void mouseReleased(MouseEvent e){}
+    /**
+     * Handles mouse click events on menu buttons.
+     * Navigates to different screens based on which button is clicked:
+     * - Play button: Level Select screen
+     * - Settings button: Settings screen
+     * - Credits button: Credits screen
+     *
+     * @param e The MouseEvent containing information about the click
+     */
     public void mouseClicked(MouseEvent e){
         System.out.println(playButton);
         if(playButton != null){
@@ -68,9 +84,14 @@ public class MainMenu implements Displayable{
             }
         }
     }
-    public void mousePressed(MouseEvent e){}
-    public void mouseEntered(MouseEvent e){}
-    public void mouseDragged(MouseEvent e){}
+
+    /**
+     * Handles mouse movement events to update button hover states.
+     * Updates the hover state for all menu buttons (Play, Settings, Credits)
+     * based on the current mouse position.
+     *
+     * @param e The MouseEvent containing information about the mouse movement
+     */
     public void mouseMoved(MouseEvent e){
         if(playButton != null){
             boolean playHovered = playButton.checkHovered(e.getX(), e.getY());
@@ -88,4 +109,13 @@ public class MainMenu implements Displayable{
             }
         }
     }
+
+    public void mousePressed(MouseEvent e){}
+    public void mouseEntered(MouseEvent e){}
+    public void mouseDragged(MouseEvent e){}
+    public void keyPressed(KeyEvent e){}
+    public void keyReleased(KeyEvent e){}
+    public void keyTyped(KeyEvent e){}
+    public void mouseExited(MouseEvent e){}
+    public void mouseReleased(MouseEvent e){}
 }

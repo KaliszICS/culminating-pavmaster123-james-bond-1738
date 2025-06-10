@@ -136,6 +136,12 @@ public abstract class Level implements Displayable{
             case KeyEvent.VK_D:
                 this.player.goRight();
                 break;
+            case KeyEvent.VK_P:
+                this.player.getPosition().setX(-2);
+                this.player.getPosition().setY(2);
+                this.camera.setZoom(2.5);
+                initialiseLevel();
+                break;
         }
     }
 

@@ -5,33 +5,29 @@ import java.awt.Font;
 import java.util.ArrayList;
 
 /**
- * The first Level of the Game?
+ * The third Level of the Game.
  * @author Pavarasan Karunainathan
  */
-public class LevelOne extends Level{
+public class LevelThree extends Level{
     Thing floor;
     ThingSearcher spikes;
 
-    private static final Color BACKGROUND_COLOUR = new Color(19, 152, 236);
-    private static final Color FLOOR_COLOUR = new Color(71, 184, 88);
-    private static final Color SPIKE_COLOUR = new Color(236, 103, 19);
+    private static final Color BACKGROUND_COLOUR = new Color(64, 60, 60);
+    private static final Color FLOOR_COLOUR = new Color(128, 128, 128);
+    private static final Color SPIKE_COLOUR = new Color(173, 32, 32);
     private static final Color HITBOX_COLOUR = new Color(255, 0, 0);
 
-    public LevelOne(){
+    public LevelThree(){
         super();
-        this.player.getPosition().setX(0);
+        this.player.getPosition().setX(-2);
         this.player.getPosition().setY(2);
         this.camera.setZoom(2.5);
         initialiseLevel();
     }
 
-    private MovingThing door;
-
     protected void initialiseLevel(){
         floor = new Thing(new Position(0, -5), 1000, 10, FLOOR_COLOUR);
-        Save.load(this, "./levels/level1.txt");
-        this.door = new MovingThing(new Position(64, 2), 0.3, 4, new Color(92, 64, 51));
-        this.space.things.add(this.door);
+        Save.load(this, "./levels/level3.txt");
     }
 
     protected void loadSpikes(ArrayList<Thing> spikes){
@@ -46,7 +42,6 @@ public class LevelOne extends Level{
     public void buttonPressed(int buttonID){
         switch(buttonID){
             case 1: // move door up
-                this.door.moveTo(new Position(this.door.getPosition().getX(), this.door.getPosition().getY()+2));
                 break;
             case 2: // end level
                 endLevel();
@@ -63,12 +58,10 @@ public class LevelOne extends Level{
             button.unpress();
         }
         this.camera.moveToPlayer();
-        this.door.reset();
     }
 
     public void update(){
         this.space.update();
-        this.door.update();
         for(Thing thing : this.spikes.search(this.player.getPosition(), 10)){
             if(this.player.collide(thing)){
                 restart();
@@ -111,8 +104,8 @@ public class LevelOne extends Level{
         for(Thing thing : this.space.things){
             drawThing(g, thing, width, height);
         }
-        for(Thing thing : this.space.spikeArray){
-            drawSpike(g, thing.getPosition(), width, height);
+        for(Thing spike : this.space.spikeArray){
+            drawSpike(g, spike.getPosition(), width, height);
         }
         for(GameButton button : this.space.buttons){
             drawButton(g, button, width, height);

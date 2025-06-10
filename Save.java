@@ -30,6 +30,7 @@ public class Save{
             ArrayList<Thing> spikes = new ArrayList<Thing>();
             ArrayList<GameButton> buttons = new ArrayList<GameButton>();
             while((line = buffer.readLine()) != null){
+                if(line.length() == 0) continue;
                 StringTokenizer tokenizer = new StringTokenizer(line);
                 String type = tokenizer.nextToken();
                 System.out.println(type);

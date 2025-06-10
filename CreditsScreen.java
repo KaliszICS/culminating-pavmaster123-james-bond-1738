@@ -5,22 +5,33 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.GradientPaint;
 
+/**
+ * A screen that displays the credits for the game.
+ * @author Levon Alexanian
+ */
 public class CreditsScreen implements Displayable{
     private Button backButton;
     private String[] credits = {
         "Super Kalisz World",
         "",
         "Created by:",
-        "Your Name",
+        "Levon Alexanian, Pavarasan Karunainathan, and Wayne Bai",
         "",
         "Special Thanks to:",
-        "My Family",
-        "My Friends",
-        "My Teachers",
+        "Tung Tung Tung Sahoor",
+        "David Blaine",
+        "Hatsune Miku",
+        "Optimus Prime",
         "",
-        "© 2024 All Rights Reserved"
+        "© 2025 All Rights Reserved"
     };
 
+    /**
+     * Renders the credits screen with a gradient background, title, credits text, and back button.
+     * @param g The Graphics2D context to render on
+     * @param width The width of the display area
+     * @param height The height of the display area
+     */
     @Override
     public void render(Graphics2D g, int width, int height){
         int buttonWidth = width / 4;
@@ -52,12 +63,20 @@ public class CreditsScreen implements Displayable{
         backButton.render(g);
     }
 
+    /**
+     * Handles mouse click events. Returns to the main menu if the back button is clicked.
+     * @param e The MouseEvent containing information about the click
+     */
     public void mouseClicked(MouseEvent e){
         if (backButton.checkHovered(e.getX(), e.getY())) {
             GameState.setCurrentScreen(GameState.Screen.MAIN_MENU);
         }
     }
 
+    /**
+     * Handles mouse movement events. Updates the hover state of the back button.
+     * @param e The MouseEvent containing information about the mouse movement
+     */
     public void mouseMoved(MouseEvent e){
         boolean backHovered = backButton.checkHovered(e.getX(), e.getY());
         if(backButton.isHovered() != backHovered){
@@ -65,7 +84,7 @@ public class CreditsScreen implements Displayable{
         }
     }
 
-    // Required interface methods
+
     public void keyPressed(KeyEvent e){}
     public void keyReleased(KeyEvent e){}
     public void keyTyped(KeyEvent e){}
