@@ -1,5 +1,3 @@
-public static
-=======
 # Super Kalisz World
 
 A fun and engaging platformer game created by Levon Alexanian, Pavarasan Karunainathan, and Wayne Bai.
@@ -75,3 +73,4 @@ Controls can be customized in the Settings menu.
 ## License
 
 © 2025 All Rights Reserved
+
