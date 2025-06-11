@@ -1,6 +1,5 @@
 import java.awt.Graphics2D;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -9,6 +8,7 @@ import java.util.ArrayList;
  * The Level class. Has a Space, Player and Camera.
  */
 public abstract class Level implements Displayable{
+    protected ThingSearcher spikes;
     protected String feedback = "null";
     protected Space space;
     protected Player player;
@@ -27,12 +27,6 @@ public abstract class Level implements Displayable{
      * Initializes the level.
      */
     protected abstract void initialiseLevel();
-    /*{
-        for(int i = 0; i < 500; i++){
-            Thing thing = new Thing(new Position(20 + ((double) i)  * (0.5 + Math.random()), ((double) i) * 0.5+1),2, 0.1);
-            space.things.add(thing);
-        }
-    }*/
 
     /**
      * Is called when a button is pressed.
@@ -40,6 +34,13 @@ public abstract class Level implements Displayable{
      */
     protected abstract void buttonPressed(int buttonID);
 
+    /**
+     * Ends the Level.
+     */
+    protected void endLevel(){
+        GameState.levelComplete();
+    }
+    
     /**
      * Loads Things into Space.
      * @param things The Things to load.
@@ -54,6 +55,7 @@ public abstract class Level implements Displayable{
      */
     protected void loadSpikes(ArrayList<Thing> spikes){
         this.space.spikeArray = spikes;
+        this.spikes = new ThingSearcher(this.space.spikeArray, true);
     }
 
     /**
@@ -101,62 +103,42 @@ public abstract class Level implements Displayable{
         }
     }
 
+    /**
+     * Renders the Level.
+     * @param g The graphics object to paint the Level on.
+     * @param width The width of the screen.
+     * @param height The height of the screen.
+     */
     @Override
-    public void render(Graphics2D g, int width, int height){
-        double zoom = this.camera.getZoom();
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, width, height);
-        g.setColor(Color.WHITE);
-        drawThing(g, this.player, width, height);
-        for(Thing thing : this.space.things){
-            drawThing(g, thing, width, height);
-        }
-        g.setFont(new Font("TimesRoman", Font.ITALIC, 12));
-        g.setColor(Color.WHITE);
-        g.drawString(this.camera.getLocation(), 50, 50);
-        g.drawString(this.player.getLocation(), 50, 100);
-        g.drawString(String.format("Zoom: %.1f", zoom), 50, 150);
-        g.drawString("Feedback: " + feedback, 50, 200);
-    }
+    public abstract void render(Graphics2D g, int width, int height);
 
-    public void setFeedback(String feedback) {
-        this.feedback = feedback;
-    }
-
+    /**
+     * Handles Player input when a key is pressed.
+     * @param e The KeyEvent to handle.
+     */
     public void keyPressed(KeyEvent e){
-        switch(e.getKeyCode()){
-            case KeyEvent.VK_W:
-                this.player.jump();
-                break;
-            case KeyEvent.VK_A:
-                this.player.goLeft();
-                break;
-            case KeyEvent.VK_S:
-                break;
-            case KeyEvent.VK_D:
-                this.player.goRight();
-                break;
-            case KeyEvent.VK_P:
-                this.player.getPosition().setX(-2);
-                this.player.getPosition().setY(2);
-                this.camera.setZoom(2.5);
-                initialiseLevel();
-                break;
+        int keyCode = e.getKeyCode();
+        if(keyCode == KeyBindings.getJumpKey()){
+            this.player.jump();
+        }else if(keyCode == KeyBindings.getLeftKey()){
+            this.player.goLeft();
+        }else if(keyCode == KeyBindings.getRightKey()){
+            this.player.goRight();
+        }else if(keyCode == KeyEvent.VK_ESCAPE){
+            endLevel();
         }
     }
 
+    /**
+     * Handles Player input when a key is released.
+     * @param e The KeyEvent to handle.
+     */
     public void keyReleased(KeyEvent e){
-        switch(e.getKeyCode()){
-            case KeyEvent.VK_W:
-                break;
-            case KeyEvent.VK_A:
-                this.player.stopLeft();
-                break;
-            case KeyEvent.VK_S:
-                break;
-            case KeyEvent.VK_D:
-                this.player.stopRight();
-                break;
+        int keyCode = e.getKeyCode();
+        if(keyCode == KeyBindings.getLeftKey()){
+            this.player.stopLeft();
+        }else if(keyCode == KeyBindings.getRightKey()){
+            this.player.stopRight();
         }
     }
     

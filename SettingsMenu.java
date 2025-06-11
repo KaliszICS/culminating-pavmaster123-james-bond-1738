@@ -13,8 +13,6 @@ public class SettingsMenu implements Displayable{
     private Button backButton;
     private Slider sfxVolumeSlider;
     private Slider musicVolumeSlider;
-    private Button CharacterButton;
-    private String Character = "Kalisz"; 
 
     // Key binding buttons
     private Button jumpKeyButton;
@@ -46,7 +44,6 @@ public class SettingsMenu implements Displayable{
         rightKeyButton = new Button("Right: " + KeyBindings.getKeyName(KeyBindings.getRightKey()), 
             defaultX, defaultY, defaultWidth, defaultHeight);
         
-        CharacterButton = new Button("Character: " + Character, defaultX, defaultY, defaultWidth, defaultHeight);
         backButton = new Button("Back", defaultX, defaultY, defaultWidth, defaultHeight);
     }
 
@@ -83,9 +80,6 @@ public class SettingsMenu implements Displayable{
         rightKeyButton.setPosition(width/2 - buttonWidth/2, startY + (buttonHeight + buttonSpacing) * 4);
         rightKeyButton.setSize(buttonWidth, buttonHeight);
         
-        CharacterButton.setPosition(width/2 - buttonWidth/2, startY + (buttonHeight + buttonSpacing) * 5);
-        CharacterButton.setSize(buttonWidth, buttonHeight);
-        
         backButton.setPosition(width/2 - buttonWidth/2, startY + (buttonHeight + buttonSpacing) * 6);
         backButton.setSize(buttonWidth, buttonHeight);
 
@@ -106,7 +100,6 @@ public class SettingsMenu implements Displayable{
         jumpKeyButton.render(g);
         leftKeyButton.render(g);
         rightKeyButton.render(g);
-        CharacterButton.render(g);
         backButton.render(g);
     }
 
@@ -132,17 +125,6 @@ public class SettingsMenu implements Displayable{
         } else if(rightKeyButton.checkHovered(e.getX(), e.getY())){
             waitingForKeyButton = rightKeyButton;
             rightKeyButton.setText("Press any key...");
-            e.consume();
-        } else if(CharacterButton.checkHovered(e.getX(), e.getY())){
-            switch (Character){
-                case "Kalisz":
-                    Character = "Cheung";
-                    break;
-                case "Cheung":
-                    Character = "Kalisz";
-                    break;
-            }
-            CharacterButton.setText("Character: " + Character);
             e.consume();
         } else if(backButton.checkHovered(e.getX(), e.getY())){
             GameState.setCurrentScreen(GameState.Screen.MAIN_MENU);
@@ -186,7 +168,6 @@ public class SettingsMenu implements Displayable{
         boolean jumpHovered = jumpKeyButton.checkHovered(e.getX(), e.getY());
         boolean leftHovered = leftKeyButton.checkHovered(e.getX(), e.getY());
         boolean rightHovered = rightKeyButton.checkHovered(e.getX(), e.getY());
-        boolean CharacterHovered = CharacterButton.checkHovered(e.getX(), e.getY());
         boolean backHovered = backButton.checkHovered(e.getX(), e.getY());
 
         if(jumpKeyButton.isHovered() != jumpHovered){
@@ -197,9 +178,6 @@ public class SettingsMenu implements Displayable{
         }
         if(rightKeyButton.isHovered() != rightHovered){
             rightKeyButton.setHovered(rightHovered);
-        }
-        if(CharacterButton.isHovered() != CharacterHovered){
-            CharacterButton.setHovered(CharacterHovered);
         }
         if(backButton.isHovered() != backHovered){
             backButton.setHovered(backHovered);

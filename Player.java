@@ -11,7 +11,7 @@ public class Player extends Thing{
     private static final double GRAVITY = 0.007;
     private static final double MOVEMENT_ACCELERATION = 0.006;
     private static final Color DEFAULT_COLOUR = new Color(240, 240, 240);
-    private static final Color DIE_COLOUR = new Color(240, 60, 60);
+    private static final Color DIE_COLOUR = new Color(240, 90, 90);
     private boolean canJump;
     private double speedX;
     private double speedY;
@@ -43,10 +43,6 @@ public class Player extends Thing{
         public int getCollisionType(){
             return this.type;
         }
-
-        public double getCollisionAmount(){
-            return this.amount;
-        }
     }
 
     /**
@@ -65,7 +61,9 @@ public class Player extends Thing{
         this.goingRight = false;
     }
     
-
+    /**
+     * Respawns the Player. Begins a death animation.
+     */
     public void respawn(){
         this.colour = DIE_COLOUR;
         this.canJump = false;

@@ -15,13 +15,7 @@ public class CreditsScreen implements Displayable{
         "Super Kalisz World",
         "",
         "Created by:",
-        "Levon Alexanian, Pavarasan Karunainathan, and Wayne Bai",
-        "",
-        "Special Thanks to:",
-        "Tung Tung Tung Sahoor",
-        "David Blaine",
-        "Hatsune Miku",
-        "Optimus Prime",
+        "Pavarasan Karunainathan, Levon Alexanian, and Wayne Bai",
         "",
         "© 2025 All Rights Reserved"
     };

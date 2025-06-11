@@ -13,7 +13,7 @@ import java.awt.GradientPaint;
 public class LevelSelectMenu implements Displayable{
     private Button[] levelButtons;
     private Button backButton;
-    private static final int NUM_LEVELS = 5;
+    private static final int NUM_LEVELS = 6;
 
     /**
      * Renders the level selection menu with a gradient background, title,
@@ -82,6 +82,15 @@ public class LevelSelectMenu implements Displayable{
                     case 2:
                         GameState.setLevel(new LevelThree());
                         break;
+                    case 3:
+                        GameState.setLevel(new LevelFour());
+                        break;
+                    case 4:
+                        GameState.setLevel(new LevelFive());
+                        break;
+                    case 5:
+                        GameState.setLevel(new LevelSix());
+                        break;
                     default:
                         break;
                 }
@@ -114,7 +123,6 @@ public class LevelSelectMenu implements Displayable{
             backButton.setHovered(backHovered);
         }
     }
-
 
     public void keyPressed(KeyEvent e){}
     public void keyReleased(KeyEvent e){}

@@ -9,7 +9,6 @@ public class Camera{
     private Position position;
     private static final int PIXELS_PER_UNIT = 20;
 
-
     /**
      * The constructor of the Camera class.
      * @param subject The Player to focus on.
@@ -37,6 +36,9 @@ public class Camera{
         this.position = position.clone();
     }
 
+    /**
+     * Sets the Camera's Position to be that of the Player's.
+     */
     public void moveToPlayer(){
         setPosition(this.subject.getPosition());
     }
@@ -49,6 +51,10 @@ public class Camera{
         return this.zoom;
     }
 
+    /**
+     * Sets the zoom of the Camera.
+     * @param zoom The zoom to set the Camera to.
+     */
     public void setZoom(double zoom){
         this.zoom = zoom;
     }
@@ -61,18 +67,32 @@ public class Camera{
         return this.position;
     }
 
+    /**
+     * Scales a decimal coordinate to an integer pixel coordinate to be used on the screen.
+     * @param x The decimal coordinate to scale.
+     * @return The coordinate in integer form, scaled to the Camera.
+     */
     public int toScale(double x){
         return (int)Math.round(x * PIXELS_PER_UNIT * this.zoom);
     }
 
+    /**
+     * Gets the integer pixel location of a x-coordinate relative to the Camera.
+     * @param x The x-coordinate to find the pixel location of.
+     * @return An integer location on the screen.
+     */
     public int relativeToCameraX(double x){
         return toScale(x - this.position.getX());
     }
 
+    /**
+     * Gets the integer pixel location of a y-coordinate relative to the Camera.
+     * @param y The y-coordinate to find the pixel location of.
+     * @return An integer location on the screen.
+     */
     public int relativeToCameraY(double y){
         return toScale(y - this.position.getY());
     }
-
 
     /**
      * @return The Camera in String format.

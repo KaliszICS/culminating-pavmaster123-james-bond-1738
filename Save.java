@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.io.FileReader;
 import java.awt.Color;
@@ -11,20 +12,43 @@ import java.io.IOException;
  * @author Pavarasan Karunainathan
  */
 public class Save{
+    private static final String SAVE_FILE = "save.txt"; 
     private Save(){}
-    public static void save(String toSaveFile, Level level){
-        
+    
+    public static void save(){
+        FileWriter writer;
+        try{
+            writer = new FileWriter(SAVE_FILE);
+            writer.write(String.valueOf(KeyBindings.getLeftKey()) + "\n");
+            writer.write(String.valueOf(KeyBindings.getRightKey()) + "\n");
+            writer.write(String.valueOf(KeyBindings.getJumpKey()) + "\n");
+            writer.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadKeybindings(){
+        try{
+            Scanner scanner = new Scanner(new FileReader(SAVE_FILE));
+            KeyBindings.setLeftKey(scanner.nextInt());
+            KeyBindings.setRightKey(scanner.nextInt());
+            KeyBindings.setJumpKey(scanner.nextInt());
+            scanner.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
      * Loads data on Things (things, spikes, buttons) into a Level from a File.
+     * Will clear anything already loaded into the Level.
      * @param level The level to load into.
      * @param levelFile The level filename to load from.
      */
     public static void load(Level level, String levelFile){
-        BufferedReader buffer;
         try{
-            buffer = new BufferedReader(new FileReader(levelFile));
+            BufferedReader buffer = new BufferedReader(new FileReader(levelFile));
             String line;
             ArrayList<Thing> things = new ArrayList<Thing>();
             ArrayList<Thing> spikes = new ArrayList<Thing>();
@@ -33,7 +57,6 @@ public class Save{
                 if(line.length() == 0) continue;
                 StringTokenizer tokenizer = new StringTokenizer(line);
                 String type = tokenizer.nextToken();
-                System.out.println(type);
                 if(type.equals("THING") || type.equals("SPIKE")){
                     double x = Double.parseDouble(tokenizer.nextToken());
                     double y = Double.parseDouble(tokenizer.nextToken());
@@ -42,7 +65,12 @@ public class Save{
                     int r = Integer.parseInt(tokenizer.nextToken());
                     int g = Integer.parseInt(tokenizer.nextToken());
                     int b = Integer.parseInt(tokenizer.nextToken());
-                    Thing item = new Thing(new Position(x, y), sizeX, sizeY, new Color(r, g, b));
+                    Thing item;
+                    if(r >= 0 && g >= 0 && b >= 0){
+                        item = new Thing(new Position(x, y), sizeX, sizeY, new Color(r, g, b));
+                    }else{
+                        item = new Thing(new Position(x, y), sizeX, sizeY);
+                    }
                     if(type.equals("THING")){
                         things.add(item);
                     }else{
@@ -59,6 +87,7 @@ public class Save{
             level.loadThings(things);
             level.loadSpikes(spikes);
             level.loadButtons(buttons);
+            buffer.close();
         }catch(IOException e){
             e.printStackTrace();
         }

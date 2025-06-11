@@ -40,6 +40,7 @@ public class KeyBindings {
      */
     public static void setJumpKey(int key) {
         jumpKey = key;
+        Save.save();
     }
 
     /**
@@ -48,6 +49,7 @@ public class KeyBindings {
      */
     public static void setLeftKey(int key) {
         leftKey = key;
+        Save.save();
     }
 
     /**
@@ -56,6 +58,7 @@ public class KeyBindings {
      */
     public static void setRightKey(int key) {
         rightKey = key;
+        Save.save();
     }
 
     /**

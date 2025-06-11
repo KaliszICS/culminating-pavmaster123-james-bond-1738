@@ -1,4 +1,8 @@
 import java.util.ArrayList;
+
+/**
+ * A data structure made to efficiently search an array of Things by Position.
+ */
 public class ThingSearcher{
     private ArrayList<Thing> things;
     private Thing[] thingsArray;
@@ -40,9 +44,6 @@ public class ThingSearcher{
                 toReturn[leftIndex + rightIndex] = right[rightIndex++];
             }
         }
-        System.out.println(leftIndex);
-        System.out.println(rightIndex);
-        System.out.println(leftIndex + rightIndex - (left.length + right.length));
         return toReturn;
     }
 
@@ -82,6 +83,12 @@ public class ThingSearcher{
         return bound;
     }
 
+    /**
+     * Searches a Position around a given radius for Things.
+     * @param position The Position to search around.
+     * @param searchRadius The radius to search around the Position.
+     * @return An ArrayList of all Things that are within the radius around the Position.
+     */
     public ArrayList<Thing> search(Position position, double searchRadius){
         int lower;
         int upper;
@@ -101,10 +108,12 @@ public class ThingSearcher{
         return thingsInBounds;
     }
 
+    /**
+     * The constructor of the ThingSearcher.
+     * @param things The ArrayList of Things to search.
+     * @param sortByX Determines if the Array is sorted by the X-axis or Y-axis.
+     */
     public ThingSearcher(ArrayList<Thing> things, boolean sortByX){
-        for(Thing thing : things){
-            System.out.println(thing);
-        }
         this.things = things;
         this.sortByX = sortByX;
         this.thingsArray = mergeSort(0, things.size()-1);

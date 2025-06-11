@@ -4,22 +4,26 @@ import java.awt.Color;
 import java.awt.Font;
 
 /**
- * The third Level of the Game.
- * @author Levon Alexanian
+ * The fifth Level of the Game.
+ * @author Pavarasan Karunainathan
  */
-public class LevelThree extends Level{
+public class LevelFive extends Level{
     private Thing floor;
+    private MovingThing door;
+    private MovingThing doorTwo;
 
-    private static int STARTING_X = 0;
+    private static int STARTING_X = -2;
     private static int STARTING_Y = 2;
     private static double LEVEL_ZOOM = 2.5;
-    private static final Color BACKGROUND_COLOUR = new Color(19, 152, 236);
-    private static final Color FLOOR_COLOUR = new Color(71, 184, 88);
+
+    private static final Color BACKGROUND_COLOUR = new Color(64, 60, 60);
+    private static final Color FLOOR_COLOUR = new Color(128, 128, 128);
+    private final Color SPIKE_COLOUR = new Color(173, 32, 32);
 
     /**
-     * The constructor of the third Level.
+     * The constructor of the fifth Level.
      */
-    public LevelThree(){
+    public LevelFive(){
         super();
         this.player.getPosition().setX(STARTING_X);
         this.player.getPosition().setY(STARTING_Y);
@@ -28,28 +32,39 @@ public class LevelThree extends Level{
     }
 
     /**
-     * Initializes level three.
+     * Initializes Level five.
      */
     protected void initialiseLevel(){
         floor = new Thing(new Position(0, -5), 1000, 10, FLOOR_COLOUR);
-        Save.load(this, "./levels/level3.txt");
-
+        Save.load(this, "./levels/level5.txt");
+        this.door = new MovingThing(new Position(62.35, 2), 0.3, 4, new Color(92, 64, 51));
+        this.space.things.add(this.door);
+        this.doorTwo = new MovingThing(new Position(78.35, 2), 0.3, 4, new Color(92, 64, 51));
+        this.space.things.add(this.doorTwo);
     }
 
     /**
-     * Detects when a button has been pressed.
-     * @param buttonID The ID of the button pressed.
-     *     If the ID is 1, ends the level.
+     * Handles the press of a GameButton.
+     * @param buttonID The ID of the GameButton pressed.
+     *     If the ID is 1, moves a door up.
+     *     If the ID is 2, moves another door up.
+     *     If the ID is 3, ends the Level.
      */
     public void buttonPressed(int buttonID){
         switch(buttonID){
-            case 1: // end the Level
+            case 1: // move door up
+                this.door.moveTo(new Position(this.door.getPosition().getX(), this.door.getPosition().getY()+3));
+                break;
+            case 2: // move doorTwo up
+                this.doorTwo.moveTo(new Position(this.doorTwo.getPosition().getX(), this.doorTwo.getPosition().getY()+3));
+                break;
+            case 3: // end level
                 endLevel();
             default:
                 break;
         }
     }
-    
+
     /**
      * Restarts the level, usually called on the player's loss.
      */
@@ -60,6 +75,8 @@ public class LevelThree extends Level{
         for(GameButton button : this.space.buttons){
             button.unpress();
         }
+        this.door.reset();
+        this.doorTwo.reset();
         this.camera.moveToPlayer();
     }
 
@@ -68,6 +85,8 @@ public class LevelThree extends Level{
      */
     public void update(){
         this.space.update();
+        this.door.update();
+        this.doorTwo.update();
         for(Thing thing : this.spikes.search(this.player.getPosition(), 10)){
             if(this.player.collide(thing)){
                 restart();
@@ -76,24 +95,24 @@ public class LevelThree extends Level{
         }
     }
 
-    private void drawSpike(Graphics2D g, Thing thing, double sizeX, double sizeY, int width, int height){
-        g.setColor(thing.getColour());
+    private void drawSpike(Graphics2D g, Position position, double sizeX, double sizeY, int width, int height){
+        g.setColor(SPIKE_COLOUR);
         int[] x = new int[]{
-            width/2 + this.camera.relativeToCameraX(thing.getPosition().getX() - sizeX/2), 
-            width/2 + this.camera.relativeToCameraX(thing.getPosition().getX()), 
-            width/2 + this.camera.relativeToCameraX(thing.getPosition().getX() + sizeX/2)
+            width/2 + this.camera.relativeToCameraX(position.getX() - sizeX/2), 
+            width/2 + this.camera.relativeToCameraX(position.getX()), 
+            width/2 + this.camera.relativeToCameraX(position.getX() + sizeX/2)
         };
         int[] y = new int[]{
-            height/2 - this.camera.relativeToCameraY(thing.getPosition().getY() - sizeY/2), 
-            height/2 - this.camera.relativeToCameraY(thing.getPosition().getY() + sizeY/2), 
-            height/2 - this.camera.relativeToCameraY(thing.getPosition().getY() - sizeY/2)
+            height/2 - this.camera.relativeToCameraY(position.getY() - sizeY/2), 
+            height/2 - this.camera.relativeToCameraY(position.getY() + sizeY/2), 
+            height/2 - this.camera.relativeToCameraY(position.getY() - sizeY/2)
         };
-        g.fill(new Polygon(x, y, 3));
+        g.fill(new Polygon(x, y, x.length));
         g.setColor(BACKGROUND_COLOUR);
     }
 
-    private void drawSpike(Graphics2D g, Thing thing, int width, int height){
-        drawSpike(g, thing, 1, 1, width, height);
+    private void drawSpike(Graphics2D g, Position position, int width, int height){
+        drawSpike(g, position, 1, 1, width, height);
     }
 
     private void drawButton(Graphics2D g, GameButton button, int width, int height){
@@ -102,7 +121,7 @@ public class LevelThree extends Level{
     }
 
     /**
-     * Renders the third Level.
+     * Renders the fifth Level.
      * @param g The graphics object to paint the Level on.
      * @param width The width of the screen.
      * @param height The height of the screen.
@@ -116,8 +135,8 @@ public class LevelThree extends Level{
         for(Thing thing : this.space.things){
             drawThing(g, thing, width, height);
         }
-        for(Thing thing : this.space.spikeArray){
-            drawSpike(g, thing, width, height);
+        for(Thing spike : this.space.spikeArray){
+            drawSpike(g, spike.getPosition(), width, height);
         }
         for(GameButton button : this.space.buttons){
             drawButton(g, button, width, height);
