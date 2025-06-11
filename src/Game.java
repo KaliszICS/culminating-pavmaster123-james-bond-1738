@@ -5,6 +5,7 @@
 public class Game{
     private GameWindow window;
     public static final double TICKS_PER_SECOND = 60;
+    private static final double NANOS_PER_SECOND = 1000000000.0;
 
     /**
      * Starts the Game.
@@ -13,7 +14,7 @@ public class Game{
         long start = System.nanoTime();
         while(true){
             long now = System.nanoTime();
-            if((double)(now - start)/1000000000.0 > 1.0/TICKS_PER_SECOND){
+            if((double)(now - start)/NANOS_PER_SECOND > 1.0/TICKS_PER_SECOND){
                 window.repaint();
                 GameState.update();
                 start = now;
