@@ -1,6 +1,6 @@
 # Super Kalisz World
 
-A fun and engaging platformer game created by Levon Alexanian, Pavarasan Karunainathan, and Wayne Bai.
+A fun and engaging platformer game created by Pavarasan Karunainathan, Levon Alexanian, and Wayne Bai.
 
 ## Description
 
@@ -60,15 +60,9 @@ Controls can be customized in the Settings menu.
 ## Credits
 
 ### Development Team
+- Wayne Bai
 - Levon Alexanian
 - Pavarasan Karunainathan
-- Wayne Bai
-
-### Special Thanks
-- Tung Tung Tung Sahoor
-- David Blaine
-- Hatsune Miku
-- Optimus Prime
 
 ## License
 
