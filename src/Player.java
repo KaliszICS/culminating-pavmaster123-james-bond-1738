@@ -97,6 +97,12 @@ public class Player extends Thing{
         }
     }
 
+    /**
+     * Updates the position and velocity of the Player.
+     * Is called every game tick (1/TICKS_PER_SECOND).
+     * @param timeX The time for a collision on the X-axis to occur.
+     * @param timeY The time for a collision on the Y-axis to occur.
+     */
     public void update(double timeX, double timeY){
         this.position.move(this.speedX*timeX, this.speedY*timeY);
         if(this.position.getY() < 0.5){ // ensure Y >= 0.5
@@ -117,6 +123,11 @@ public class Player extends Thing{
         }
     }
 
+    /**
+     * Updates the position and velocity of the Player.
+     * Is called every game tick (1/TICKS_PER_SECOND).
+     * @param time The time for a collision on the Y-axis to occur.
+     */
     public void updateXOnTime(double time){
         this.position.moveX(this.speedX);
         this.position.moveY(this.speedY*time);
@@ -139,6 +150,11 @@ public class Player extends Thing{
         }
     }
 
+    /**
+     * Updates the position and velocity of the Player.
+     * Is called every game tick (1/TICKS_PER_SECOND).
+     * @param time The time for a collision on the X-axis to occur.
+     */
     public void updateYOnTime(double time){
         this.position.moveX(this.speedX*time);
         if(this.goingRight){
