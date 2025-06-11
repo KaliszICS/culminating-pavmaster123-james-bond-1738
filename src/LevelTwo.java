@@ -32,7 +32,7 @@ public class LevelTwo extends Level{
      */
     protected void initialiseLevel(){
         floor = new Thing(new Position(0, -5), 1000, 10, FLOOR_COLOUR);
-        Save.load(this, "./levels/level2.txt");
+        Save.load(this, "./src/levels/level2.txt");
         
     }
 

@@ -49,7 +49,7 @@ public class LevelSix extends Level{
      * Initializes level six.
      */
     protected void initialiseLevel(){
-        Save.load(this, "./levels/level6.txt");
+        Save.load(this, "./src/levels/level6.txt");
     }
 
     /**

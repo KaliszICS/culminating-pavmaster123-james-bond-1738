@@ -36,7 +36,7 @@ public class LevelFive extends Level{
      */
     protected void initialiseLevel(){
         floor = new Thing(new Position(0, -5), 1000, 10, FLOOR_COLOUR);
-        Save.load(this, "./levels/level5.txt");
+        Save.load(this, "./src/levels/level5.txt");
         this.door = new MovingThing(new Position(62.35, 2), 0.3, 4, new Color(92, 64, 51));
         this.space.things.add(this.door);
         this.doorTwo = new MovingThing(new Position(78.35, 2), 0.3, 4, new Color(92, 64, 51));

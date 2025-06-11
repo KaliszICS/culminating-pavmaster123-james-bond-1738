@@ -32,7 +32,7 @@ public class CreditsScreen implements Displayable{
         int buttonHeight = height / 20;
         
         // Create back button at the bottom
-        backButton = new Button("Back", width/2 - buttonWidth/2, height - buttonHeight - 20, buttonWidth, buttonHeight);
+        backButton = new Button("Back", width/2 - buttonWidth/2, height - buttonHeight - 400, buttonWidth, buttonHeight);
         
         // Draw background
         GradientPaint backgroundGradient = new GradientPaint(0, 0, new Color(70, 130, 180), 0, height, new Color(135, 206, 235));

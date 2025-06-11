@@ -34,7 +34,7 @@ public class LevelFour extends Level{
      */
     protected void initialiseLevel(){
         floor = new Thing(new Position(0, -5), 1000, 10, FLOOR_COLOUR);
-        Save.load(this, "./levels/level4.txt");
+        Save.load(this, "./src/levels/level4.txt");
     }
 
     /**

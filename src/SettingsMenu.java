@@ -26,8 +26,8 @@ public class SettingsMenu implements Displayable{
      */
     public SettingsMenu() {
         // Initialize sliders with default values
-        sfxVolumeSlider = new Slider("SFX Volume", 0, 0, 0, 0, 0, 100, 50);
-        musicVolumeSlider = new Slider("Music Volume", 0, 0, 0, 0, 0, 100, 50);
+        sfxVolumeSlider = new Slider("SFX Volume", 0, 0, 0, 0, 0, 100, 100);
+        musicVolumeSlider = new Slider("Music Volume", 0, 0, 0, 0, 0, 100, 100);
         
         // Initialize buttons with default positions (will be updated in render)
         int defaultWidth = 200;
