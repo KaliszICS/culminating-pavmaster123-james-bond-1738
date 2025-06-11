@@ -12,9 +12,6 @@ Super Kalisz World is a 2D platformer game featuring multiple levels, customizab
 - **Customizable Controls**: 
   - Configurable jump, left, and right movement keys
   - Easy-to-use key binding interface
-- **Audio Settings**:
-  - Adjustable SFX volume
-  - Adjustable music volume
 - **User-Friendly Interface**:
   - Nature-themed main menu
   - Intuitive level selection screen
@@ -22,7 +19,6 @@ Super Kalisz World is a 2D platformer game featuring multiple levels, customizab
   - Credits screen
 
 ## Controls
-
 Default controls:
 - **W**: Jump
 - **A**: Move Left
@@ -34,27 +30,8 @@ Controls can be customized in the Settings menu.
 
 1. Ensure you have Java installed on your system
 2. Download the latest release from the releases page
-3. Run the game using:
-   ```bash
-   java -jar SuperKaliszWorld.jar
-   ```
-
-## Development
-
-### Prerequisites
-- Java Development Kit (JDK)
-- Java Runtime Environment (JRE)
-
-### Building from Source
-1. Clone the repository
-2. Compile the source code:
-   ```bash
-   javac src/*.java
-   ```
-3. Run the game:
-   ```bash
-   java -cp src Main
-   ```
+3. Open the folder in terminal
+4. Run "java -cp bin Game"
 
 ## Credits
 
