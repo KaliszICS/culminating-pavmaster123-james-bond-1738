@@ -12,7 +12,6 @@ Super Kalisz World is a 2D platformer game featuring multiple levels, customizab
 - **Customizable Controls**: 
   - Configurable jump, left, and right movement keys
   - Easy-to-use key binding interface
-- **Character Selection**: Choose between different characters (Kalisz and Cheung)
 - **Audio Settings**:
   - Adjustable SFX volume
   - Adjustable music volume
