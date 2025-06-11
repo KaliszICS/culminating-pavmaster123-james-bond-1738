@@ -1,8 +1,4 @@
-/** 
- * @author Pavarasan Karunainathan
- * An interface that may be used to display Graphics, while also
- * taking in user input.
- */
+
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyListener;

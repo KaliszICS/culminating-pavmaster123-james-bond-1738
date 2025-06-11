@@ -155,4 +155,4 @@ public class Slider {
     public int getValue() {
         return value;
     }
-} 
+}

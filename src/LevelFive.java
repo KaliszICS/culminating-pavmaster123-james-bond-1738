@@ -4,24 +4,26 @@ import java.awt.Color;
 import java.awt.Font;
 
 /**
- * The first Level of the Game.
+ * The fifth Level of the Game.
  * @author Pavarasan Karunainathan
  */
-public class LevelOne extends Level{
+public class LevelFive extends Level{
     private Thing floor;
-    
-    private static int STARTING_X = 0;
+    private MovingThing door;
+    private MovingThing doorTwo;
+
+    private static int STARTING_X = -2;
     private static int STARTING_Y = 2;
     private static double LEVEL_ZOOM = 2.5;
 
-    private static final Color BACKGROUND_COLOUR = new Color(19, 152, 236);
-    private static final Color FLOOR_COLOUR = new Color(71, 184, 88);
-    private static final Color SPIKE_COLOUR = new Color(236, 103, 19);
+    private static final Color BACKGROUND_COLOUR = new Color(64, 60, 60);
+    private static final Color FLOOR_COLOUR = new Color(128, 128, 128);
+    private final Color SPIKE_COLOUR = new Color(173, 32, 32);
 
     /**
-     * The constructor of the first Level.
+     * The constructor of the fifth Level.
      */
-    public LevelOne(){
+    public LevelFive(){
         super();
         this.player.getPosition().setX(STARTING_X);
         this.player.getPosition().setY(STARTING_Y);
@@ -29,32 +31,35 @@ public class LevelOne extends Level{
         initialiseLevel();
     }
 
-    private MovingThing door;
-
     /**
-     * Initializes Level one.
+     * Initializes Level five.
      */
     protected void initialiseLevel(){
         floor = new Thing(new Position(0, -5), 1000, 10, FLOOR_COLOUR);
-        Save.load(this, "./levels/level1.txt");
-        this.door = new MovingThing(new Position(64, 2), 0.3, 4, new Color(92, 64, 51));
+        Save.load(this, "./levels/level5.txt");
+        this.door = new MovingThing(new Position(62.35, 2), 0.3, 4, new Color(92, 64, 51));
         this.space.things.add(this.door);
+        this.doorTwo = new MovingThing(new Position(78.35, 2), 0.3, 4, new Color(92, 64, 51));
+        this.space.things.add(this.doorTwo);
     }
 
     /**
      * Handles the press of a GameButton.
      * @param buttonID The ID of the GameButton pressed.
-     *     If the ID is 1, moves the door up.
-     *     If the ID is 2, ends the Level.
+     *     If the ID is 1, moves a door up.
+     *     If the ID is 2, moves another door up.
+     *     If the ID is 3, ends the Level.
      */
     public void buttonPressed(int buttonID){
         switch(buttonID){
             case 1: // move door up
-                this.door.moveTo(new Position(this.door.getPosition().getX(), this.door.getPosition().getY()+2));
+                this.door.moveTo(new Position(this.door.getPosition().getX(), this.door.getPosition().getY()+3));
                 break;
-            case 2: // end level
+            case 2: // move doorTwo up
+                this.doorTwo.moveTo(new Position(this.doorTwo.getPosition().getX(), this.doorTwo.getPosition().getY()+3));
+                break;
+            case 3: // end level
                 endLevel();
-                break;
             default:
                 break;
         }
@@ -70,8 +75,9 @@ public class LevelOne extends Level{
         for(GameButton button : this.space.buttons){
             button.unpress();
         }
-        this.camera.moveToPlayer();
         this.door.reset();
+        this.doorTwo.reset();
+        this.camera.moveToPlayer();
     }
 
     /**
@@ -80,6 +86,7 @@ public class LevelOne extends Level{
     public void update(){
         this.space.update();
         this.door.update();
+        this.doorTwo.update();
         for(Thing thing : this.spikes.search(this.player.getPosition(), 10)){
             if(this.player.collide(thing)){
                 restart();
@@ -100,7 +107,7 @@ public class LevelOne extends Level{
             height/2 - this.camera.relativeToCameraY(position.getY() + sizeY/2), 
             height/2 - this.camera.relativeToCameraY(position.getY() - sizeY/2)
         };
-        g.fill(new Polygon(x, y, 3));
+        g.fill(new Polygon(x, y, x.length));
         g.setColor(BACKGROUND_COLOUR);
     }
 
@@ -114,7 +121,7 @@ public class LevelOne extends Level{
     }
 
     /**
-     * Renders the first Level.
+     * Renders the fifth Level.
      * @param g The graphics object to paint the Level on.
      * @param width The width of the screen.
      * @param height The height of the screen.
@@ -128,8 +135,8 @@ public class LevelOne extends Level{
         for(Thing thing : this.space.things){
             drawThing(g, thing, width, height);
         }
-        for(Thing thing : this.space.spikeArray){
-            drawSpike(g, thing.getPosition(), width, height);
+        for(Thing spike : this.space.spikeArray){
+            drawSpike(g, spike.getPosition(), width, height);
         }
         for(GameButton button : this.space.buttons){
             drawButton(g, button, width, height);

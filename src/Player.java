@@ -5,13 +5,13 @@ import java.awt.Color;
  * @author Pavarasan Karunainathan
  */
 public class Player extends Thing{
-    private static final double MAX_MOVEMENT_SPEED = 0.25;
-    private static final double MIN_MOVEMENT_SPEED = 0.1;
+    private static final double MAX_MOVEMENT_SPEED = 0.20;
+    private static final double MIN_MOVEMENT_SPEED = 0.04;
     private static final double JUMP_SPEED = 0.17;
-    private static final double GRAVITY = 0.01;
-    private static final double MOVEMENT_ACCELERATION = 0.01;
+    private static final double GRAVITY = 0.007;
+    private static final double MOVEMENT_ACCELERATION = 0.006;
     private static final Color DEFAULT_COLOUR = new Color(240, 240, 240);
-    private static final Color DIE_COLOUR = new Color(240, 120, 120);
+    private static final Color DIE_COLOUR = new Color(240, 90, 90);
     private boolean canJump;
     private double speedX;
     private double speedY;
@@ -43,10 +43,6 @@ public class Player extends Thing{
         public int getCollisionType(){
             return this.type;
         }
-
-        public double getCollisionAmount(){
-            return this.amount;
-        }
     }
 
     /**
@@ -65,7 +61,9 @@ public class Player extends Thing{
         this.goingRight = false;
     }
     
-
+    /**
+     * Respawns the Player. Begins a death animation.
+     */
     public void respawn(){
         this.colour = DIE_COLOUR;
         this.canJump = false;
@@ -81,6 +79,26 @@ public class Player extends Thing{
      */
     public void update(){
         this.position.move(this.speedX, this.speedY);
+        if(this.position.getY() < 0.5){ // ensure Y >= 0.5
+            this.position.setY(0.5);
+            this.canJump = true;
+        }else{
+            this.speedY -= GRAVITY;
+        }
+
+        if(this.goingRight && this.speedX < MAX_MOVEMENT_SPEED){
+            this.speedX += MOVEMENT_ACCELERATION;
+        }else if(this.goingLeft && this.speedX > -MAX_MOVEMENT_SPEED){
+            this.speedX -= MOVEMENT_ACCELERATION;
+        }
+
+        if(this.colour.getGreen() != DEFAULT_COLOUR.getGreen()){
+            this.colour = new Color(240, this.colour.getGreen()+2, this.colour.getBlue()+2);
+        }
+    }
+
+    public void update(double timeX, double timeY){
+        this.position.move(this.speedX*timeX, this.speedY*timeY);
         if(this.position.getY() < 0.5){ // ensure Y >= 0.5
             this.position.setY(0.5);
             this.canJump = true;
@@ -164,8 +182,8 @@ public class Player extends Thing{
     }
 
     /**
-     * Detects a collision with another object.
-     * @param other The other object to collide with.
+     * Detects a collision with another Thing.
+     * @param other The other Thing to collide with.
      */
     public boolean collide(Thing other){
         // check X

@@ -1,58 +1,65 @@
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.Polygon;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.awt.Color;
 import java.awt.Font;
 
 /**
- * The first Level of the Game.
+ * The sixth Level of the Game.
  * @author Pavarasan Karunainathan
  */
-public class LevelOne extends Level{
-    private Thing floor;
-    
-    private static int STARTING_X = 0;
-    private static int STARTING_Y = 2;
-    private static double LEVEL_ZOOM = 2.5;
+public class LevelSix extends Level{
+    private Font font;
 
-    private static final Color BACKGROUND_COLOUR = new Color(19, 152, 236);
-    private static final Color FLOOR_COLOUR = new Color(71, 184, 88);
-    private static final Color SPIKE_COLOUR = new Color(236, 103, 19);
+    private static int STARTING_X = 0;
+    private static int STARTING_Y = 64;
+    private static double LEVEL_ZOOM = 2.5;
+    private static double VOID_LIMIT = 50.0; // the height that the player will die at if it goes under
+    private static int TEXT_OFFSET = 2; // The number of pixels from the bottom to offset the text by.
+    
+    private static final Color BACKGROUND_COLOUR = new Color(40, 2, 2);
+    protected final Color SPIKE_COLOUR = new Color(234, 16, 16);
 
     /**
-     * The constructor of the first Level.
+     * The constructor of the sixth Level.
      */
-    public LevelOne(){
+    public LevelSix(){
         super();
         this.player.getPosition().setX(STARTING_X);
         this.player.getPosition().setY(STARTING_Y);
         this.camera.setZoom(LEVEL_ZOOM);
         initialiseLevel();
+        File file = new File("Aldrich.ttf");
+        try{
+            Font font = Font.createFont(Font.TRUETYPE_FONT, file);
+            GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            g.registerFont(font);
+            this.font = new Font("Aldrich", Font.PLAIN, 24);
+        }catch(Exception e){
+            e.printStackTrace();
+            this.font = new Font("Arial", Font.PLAIN, 24);
+        }
     }
 
-    private MovingThing door;
-
     /**
-     * Initializes Level one.
+     * Initializes level six.
      */
     protected void initialiseLevel(){
-        floor = new Thing(new Position(0, -5), 1000, 10, FLOOR_COLOUR);
-        Save.load(this, "./levels/level1.txt");
-        this.door = new MovingThing(new Position(64, 2), 0.3, 4, new Color(92, 64, 51));
-        this.space.things.add(this.door);
+        Save.load(this, "./levels/level6.txt");
     }
 
     /**
-     * Handles the press of a GameButton.
-     * @param buttonID The ID of the GameButton pressed.
-     *     If the ID is 1, moves the door up.
-     *     If the ID is 2, ends the Level.
+     * Detects when a button has been pressed.
+     * @param buttonID The ID of the button pressed.
+     *     If the ID is 1, ends the level.
      */
     public void buttonPressed(int buttonID){
         switch(buttonID){
-            case 1: // move door up
-                this.door.moveTo(new Position(this.door.getPosition().getX(), this.door.getPosition().getY()+2));
-                break;
-            case 2: // end level
+            case 1: // ends the level
                 endLevel();
                 break;
             default:
@@ -71,7 +78,6 @@ public class LevelOne extends Level{
             button.unpress();
         }
         this.camera.moveToPlayer();
-        this.door.reset();
     }
 
     /**
@@ -79,7 +85,9 @@ public class LevelOne extends Level{
      */
     public void update(){
         this.space.update();
-        this.door.update();
+        if(this.player.getPosition().getY() <= VOID_LIMIT){
+            restart();
+        }
         for(Thing thing : this.spikes.search(this.player.getPosition(), 10)){
             if(this.player.collide(thing)){
                 restart();
@@ -100,7 +108,7 @@ public class LevelOne extends Level{
             height/2 - this.camera.relativeToCameraY(position.getY() + sizeY/2), 
             height/2 - this.camera.relativeToCameraY(position.getY() - sizeY/2)
         };
-        g.fill(new Polygon(x, y, 3));
+        g.fill(new Polygon(x, y, x.length));
         g.setColor(BACKGROUND_COLOUR);
     }
 
@@ -113,8 +121,31 @@ public class LevelOne extends Level{
         drawThing(g, button.getFoundation(), width, height);
     }
 
+    private void drawTextOnThing(Graphics2D g, Thing thing, int width, int height, String textToDraw){
+        Rectangle2D r = g.getFontMetrics(this.font).getStringBounds(textToDraw, g);
+        BufferedImage image = new BufferedImage((int)r.getWidth(), (int)r.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = image.createGraphics();
+        
+        g2.setColor(Color.WHITE);
+        g2.setFont(this.font);
+        g2.drawString(textToDraw, 0, image.getHeight()-TEXT_OFFSET);
+        g2.dispose();
+        int imageWidth = this.camera.toScale(thing.getSizeX());
+        int imageHeight = this.camera.toScale(thing.getSizeY());
+        BufferedImage toRender = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
+        g2 = toRender.createGraphics();
+        g2.drawImage(image.getScaledInstance(imageWidth, imageHeight, Image.SCALE_FAST), 0, 0, null);
+        g2.dispose();
+        g.drawImage(
+            toRender,
+            width/2 + this.camera.relativeToCameraX(thing.getPosition().getX() - thing.getSizeX()/2),
+            height/2 - this.camera.relativeToCameraY(thing.getPosition().getY() + thing.getSizeY()/2), 
+            null
+        );
+    }
+
     /**
-     * Renders the first Level.
+     * Renders the sixth Level.
      * @param g The graphics object to paint the Level on.
      * @param width The width of the screen.
      * @param height The height of the screen.
@@ -124,12 +155,17 @@ public class LevelOne extends Level{
         g.setColor(BACKGROUND_COLOUR);
         g.fillRect(0, 0, width, height);
         g.setColor(Color.WHITE);
-        drawThing(g, this.floor, width, height);
+        int i = -1;
+        String[] text = {"CRAZY?", "I", "WAS", "CRAZY", "ONCE.", "THEY", "LOCKED", "ME", "IN", "A", "ROOM.", "A", "RUBBER", "ROOM.", "A", "CRAZY", "ROOM?"};
         for(Thing thing : this.space.things){
             drawThing(g, thing, width, height);
+            if(i >= 0 && text.length > i){
+                drawTextOnThing(g, thing, width, height, text[i]);
+            }
+            i++;
         }
-        for(Thing thing : this.space.spikeArray){
-            drawSpike(g, thing.getPosition(), width, height);
+        for(Thing spike : this.space.spikeArray){
+            drawSpike(g, spike.getPosition(), width, height);
         }
         for(GameButton button : this.space.buttons){
             drawButton(g, button, width, height);

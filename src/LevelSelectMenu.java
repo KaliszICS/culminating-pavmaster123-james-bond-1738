@@ -13,7 +13,7 @@ import java.awt.GradientPaint;
 public class LevelSelectMenu implements Displayable{
     private Button[] levelButtons;
     private Button backButton;
-    private static final int NUM_LEVELS = 5;
+    private static final int NUM_LEVELS = 6;
 
     /**
      * Renders the level selection menu with a gradient background, title,
@@ -72,11 +72,30 @@ public class LevelSelectMenu implements Displayable{
     public void mouseClicked(MouseEvent e){
         for(int i = 0; i < NUM_LEVELS; i++){
             if(levelButtons[i].checkHovered(e.getX(), e.getY())){
-                if(i == 0){
-                    GameState.setLevel(new LevelOne());
-                    GameState.setCurrentScreen(GameState.Screen.GAME);
-                    System.out.println("Level " + (i + 1) + " selected");
+                switch(i){
+                    case 0:
+                        GameState.setLevel(new LevelOne());
+                        break;
+                    case 1:
+                        GameState.setLevel(new LevelTwo());
+                        break;
+                    case 2:
+                        GameState.setLevel(new LevelThree());
+                        break;
+                    case 3:
+                        GameState.setLevel(new LevelFour());
+                        break;
+                    case 4:
+                        GameState.setLevel(new LevelFive());
+                        break;
+                    case 5:
+                        GameState.setLevel(new LevelSix());
+                        break;
+                    default:
+                        break;
                 }
+                GameState.setCurrentScreen(GameState.Screen.GAME);
+                System.out.println("Level " + (i + 1) + " selected");
                 return;
             }
         }
@@ -104,7 +123,6 @@ public class LevelSelectMenu implements Displayable{
             backButton.setHovered(backHovered);
         }
     }
-
 
     public void keyPressed(KeyEvent e){}
     public void keyReleased(KeyEvent e){}
