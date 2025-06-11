@@ -4,7 +4,7 @@ A fun and engaging platformer game created by Pavarasan Karunainathan, Levon Ale
 
 ## Description
 
-Super Kalisz World is a 2D platformer game featuring multiple levels, customizable controls, and a charming nature-themed interface. Players can navigate through various levels, customize their gaming experience, and enjoy smooth gameplay mechanics.
+Super Kalisz World is a 2D platformer game featuring Kalisz Junior (the white cube).
 
 ## Features
 
