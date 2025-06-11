@@ -1,21 +1,12 @@
 /**
- * Manages the game's state and screen transitions and handles the switching between them.\
- * @author Levon Alexanian
+ * The GameState class, handles the changing of displays in GameWindow.
  */
 public class GameState{
-    /**
-     * Enum representing the different screens in the game.
-     */
     public enum Screen{
-        /** The main menu screen */
         MAIN_MENU,
-        /** The level selection screen */
         LEVEL_SELECT,
-        /** The settings menu screen */
         SETTINGS,
-        /** The credits screen */
         CREDITS,
-        /** The active gameplay screen */
         GAME
     }
 
@@ -28,20 +19,17 @@ public class GameState{
     private final static CreditsScreen creditsScreen = new CreditsScreen();
 
     /**
-     * Initializes the game state with the main window and level screen.
-     * Sets the initial screen to the main menu.
-     * @param gameWindow The main game window
-     * @param level The level screen instance
+     * Initializes the GameState.
+     * @param gameWindow The GameWindow that will receive input from the GameState.
      */
-    public static void initialise(GameWindow gameWindow, Level level){
+    public static void initialise(GameWindow gameWindow){
         window = gameWindow;
-        levelScreen = level;
+        levelScreen = new LevelOne();
         setCurrentScreen(Screen.MAIN_MENU);
     }
     
     /**
-     * Updates the current game state.
-     * If the current screen is the game screen, updates the level.
+     * If the current Screen is a Level, updates the level.
      */
     public static void update(){
         if(currentScreen == Screen.GAME){
@@ -50,8 +38,8 @@ public class GameState{
     }
 
     /**
-     * Changes the current screen and updates the window's display.
-     * @param screen The screen to switch to
+     * Sets the currently viewed Screen to a given Screen.
+     * @param screen The Screen to display.
      */
     public static void setCurrentScreen(Screen screen){
         currentScreen = screen;
@@ -59,8 +47,8 @@ public class GameState{
     }
 
     /**
-     * Returns the current screen's displayable object.
-     * @return The Displayable object for the current screen
+     * Returns the Displayable that is currently being viewed.
+     * @return The screen currently being viewed.
      */
     public static Displayable getCurrentScreen(){
         switch(currentScreen){
@@ -80,20 +68,17 @@ public class GameState{
     }
 
     /**
-     * Sets the current level screen.
-     * @param level The new level screen instance
+     * Sets the current Level.
+     * @param level The Level to set to.
      */
     public static void setLevel(Level level){
         levelScreen = level;
     }
 
     /**
-     * Handles level completion by displaying a completion message.
-     * Shows a black screen with "Level Complete!" text.
+     * Is called after a level is complete.
      */
     public static void levelComplete(){
-        window.setDisplay(new BlackScreenWithText("Level Complete!"));
-        long start = System.currentTimeMillis();
-        //while(System.currentTimeMillis() - start < 1000);
+        setCurrentScreen(Screen.LEVEL_SELECT);
     }
 } 

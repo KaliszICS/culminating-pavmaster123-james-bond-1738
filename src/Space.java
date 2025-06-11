@@ -34,7 +34,6 @@ public class Space{
             CollisionUpdate update = this.player.moveCollide(things.get(i));
             collision.combine(update);
         }
-
         for(int i = 0; i < buttons.size(); i++){
             GameButton button = buttons.get(i);
             this.player.collide(button.getFoundation());
@@ -50,11 +49,15 @@ public class Space{
         }
 
         if(collision.getUpdateType() == CollisionUpdate.UPDATE_BOTH){
-            this.player.update();
+            if(collision.getCollisionTimeX() == 1 && collision.getCollisionTimeY() == 1){
+                this.player.update();
+            }else{
+                this.player.update(collision.getCollisionTimeX(), collision.getCollisionTimeY());
+            }
         }else if(collision.getUpdateType() == CollisionUpdate.UPDATE_X){
-            this.player.updateXOnTime(collision.getCollisionTime());
+            this.player.updateXOnTime(collision.getCollisionTimeX());
         }else if(collision.getUpdateType() == CollisionUpdate.UPDATE_Y){
-            this.player.updateYOnTime(collision.getCollisionTime());
+            this.player.updateYOnTime(collision.getCollisionTimeY());
         }
 
         this.camera.update();

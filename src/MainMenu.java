@@ -73,7 +73,6 @@ public class MainMenu implements Displayable{
      * @param e The MouseEvent containing information about the click
      */
     public void mouseClicked(MouseEvent e){
-        System.out.println(playButton);
         if(playButton != null){
             if(playButton.checkHovered(e.getX(), e.getY())){
                 GameState.setCurrentScreen(GameState.Screen.LEVEL_SELECT);
