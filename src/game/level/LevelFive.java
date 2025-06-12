@@ -24,7 +24,6 @@ public class LevelFive extends Level{
     /**
      * The constructor of the fifth Level.
      */
-    @Override
     public LevelFive(){
         super(STARTING_X, STARTING_Y, LEVEL_ZOOM, BACKGROUND_COLOUR);
         initialiseLevel();
