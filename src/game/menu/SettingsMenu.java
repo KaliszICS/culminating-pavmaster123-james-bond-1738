@@ -5,8 +5,7 @@ import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseAdapter;
 
 import game.Displayable;
 import game.GameState;
@@ -18,7 +17,7 @@ import java.awt.GradientPaint;
  * A settings menu screen that allows players to customize game settings.
  * @author Levon Alexanian
  */
-public class SettingsMenu implements Displayable, KeyListener, MouseListener, MouseMotionListener{
+public class SettingsMenu extends MouseAdapter implements Displayable, KeyListener{
     private Button backButton;
     private Slider sfxVolumeSlider;
     private Slider musicVolumeSlider;
@@ -146,6 +145,7 @@ public class SettingsMenu implements Displayable, KeyListener, MouseListener, Mo
      * Updates the selected key binding when a new key is pressed.
      * @param e The KeyEvent containing information about the key press
      */
+    @Override
     public void keyPressed(KeyEvent e) {
         if(waitingForKeyButton != null) {
             int keyCode = e.getKeyCode();
@@ -236,23 +236,13 @@ public class SettingsMenu implements Displayable, KeyListener, MouseListener, Mo
      * Detects if a key was released. Does nothing.
      * @param e The KeyEvent detected.
      */
+    @Override
     public void keyReleased(KeyEvent e){}
     
     /**
      * Detects if a key was typed. Does nothing.
      * @param e The KeyEvent detected.
      */
+    @Override
     public void keyTyped(KeyEvent e){}
-
-    /**
-     * Detects if the mouse has exited focus. Does nothing.
-     * @param e The MouseEvent detected.
-     */
-    public void mouseExited(MouseEvent e){}
-
-    /**
-     * Detects if the mouse has entered focus. Does nothing.
-     * @param e The MouseEvent detected.
-     */
-    public void mouseEntered(MouseEvent e){}
 } 

@@ -3,8 +3,7 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseAdapter;
 
 import game.Displayable;
 import game.GameState;
@@ -21,7 +20,7 @@ import java.awt.GradientPaint;
  * A menu screen that allows players to select different game levels.
  * @author Levon Alexanian
  */
-public class LevelSelectMenu implements Displayable, MouseListener, MouseMotionListener{
+public class LevelSelectMenu extends MouseAdapter implements Displayable{
     private Button[] levelButtons;
     private Button backButton;
     private static final int NUM_LEVELS = 6;
@@ -80,6 +79,7 @@ public class LevelSelectMenu implements Displayable, MouseListener, MouseMotionL
      * When the back button is clicked, it returns to the main menu.
      * @param e The MouseEvent containing information about the click
      */
+    @Override
     public void mouseClicked(MouseEvent e){
         for(int i = 0; i < NUM_LEVELS; i++){
             if(levelButtons[i].checkHovered(e.getX(), e.getY())){
@@ -121,6 +121,7 @@ public class LevelSelectMenu implements Displayable, MouseListener, MouseMotionL
      * Updates the hover state for all level buttons and the back button.
      * @param e The MouseEvent containing information about the mouse movement
      */
+    @Override
     public void mouseMoved(MouseEvent e) {
         for (Button button : levelButtons) {
             boolean isHovered = button.checkHovered(e.getX(), e.getY());
@@ -134,34 +135,4 @@ public class LevelSelectMenu implements Displayable, MouseListener, MouseMotionL
             backButton.setHovered(backHovered);
         }
     }
-
-    /**
-     * Detects if the mouse has exited the focus. Does nothing.
-     * @param e
-     */
-    public void mouseExited(MouseEvent e){}
-    
-    /**
-     * Detects if the mouse has been released. Does nothing.
-     * @param e
-     */
-    public void mouseReleased(MouseEvent e){}
-    
-    /**
-     * Detects if the mouse has been pressed. Does nothing.
-     * @param e
-     */
-    public void mousePressed(MouseEvent e){}
-    
-    /**
-     * Detects if the mouse has entered focus. Does nothing.
-     * @param e
-     */
-    public void mouseEntered(MouseEvent e){}
-    
-    /**
-     * Detects if the mouse has been dragged. Does nothing.
-     * @param e
-     */
-    public void mouseDragged(MouseEvent e){}
 } 

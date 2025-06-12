@@ -3,8 +3,7 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.GradientPaint;
 import java.awt.geom.Rectangle2D;
 
@@ -15,7 +14,7 @@ import game.GameState;
  * The main menu screen of the game.
  * @author Levon Alexanian
  */
-public class MainMenu implements Displayable, MouseListener, MouseMotionListener{
+public class MainMenu extends MouseAdapter implements Displayable{
     private Button playButton;
     private Button settingsButton;
     private Button creditsButton;
@@ -113,34 +112,4 @@ public class MainMenu implements Displayable, MouseListener, MouseMotionListener
             }
         }
     }
-
-    /**
-     * Detects if the mouse has exited the focus. Does nothing.
-     * @param e
-     */
-    public void mouseExited(MouseEvent e){}
-    
-    /**
-     * Detects if the mouse has been released. Does nothing.
-     * @param e
-     */
-    public void mouseReleased(MouseEvent e){}
-    
-    /**
-     * Detects if the mouse has been pressed. Does nothing.
-     * @param e
-     */
-    public void mousePressed(MouseEvent e){}
-    
-    /**
-     * Detects if the mouse has entered focus. Does nothing.
-     * @param e
-     */
-    public void mouseEntered(MouseEvent e){}
-    
-    /**
-     * Detects if the mouse has been dragged. Does nothing.
-     * @param e
-     */
-    public void mouseDragged(MouseEvent e){}
 }
