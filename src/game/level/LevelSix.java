@@ -47,6 +47,7 @@ public class LevelSix extends Level{
     /**
      * Initializes level six.
      */
+    @Override
     protected void initialiseLevel(){
         Save.load(this, "./levels/level6.txt");
     }
@@ -56,6 +57,7 @@ public class LevelSix extends Level{
      * @param buttonID The ID of the button pressed.
      *     If the ID is 1, ends the level.
      */
+    @Override
     public void buttonPressed(int buttonID){
         switch(buttonID){
             case 1: // ends the level
@@ -69,6 +71,7 @@ public class LevelSix extends Level{
     /**
      * Updates the Level, called every game tick.
      */
+    @Override
     public void update(){
         super.update();
         if(this.player.getPosition().getY() <= VOID_LIMIT){
@@ -105,6 +108,7 @@ public class LevelSix extends Level{
      * @param width The width of the screen.
      * @param height The height of the screen.
      */
+    @Override
     public void render(Graphics2D g, int width, int height){
         super.render(g, width, height);
         int i = -1;

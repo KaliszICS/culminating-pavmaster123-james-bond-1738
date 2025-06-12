@@ -29,6 +29,7 @@ public class LevelTwo extends Level{
     /**
      * Initializes level two.
      */
+    @Override
     protected void initialiseLevel(){
         Save.load(this, "./levels/level2.txt");
     }
@@ -39,6 +40,7 @@ public class LevelTwo extends Level{
      *     If the ID is 1, kills the Player.
      *     If the ID is 2, ends the Level.
      */
+    @Override
     public void buttonPressed(int buttonID){
         switch(buttonID){
             case 1: // back to spawn
@@ -52,7 +54,7 @@ public class LevelTwo extends Level{
         }
     }
 
-    private void drawTriangle(Graphics2D g, Position pos, double size, int width, int height) {
+    private void drawTriangle(Graphics2D g, Position pos, double size, int width, int height){
         int[] x = new int[]{
             width/2 + this.camera.relativeToCameraX(pos.getX() - size/2),
             width/2 + this.camera.relativeToCameraX(pos.getX()),
@@ -72,6 +74,7 @@ public class LevelTwo extends Level{
      * @param width The width of the screen.
      * @param height The height of the screen.
      */
+    @Override
     public void render(Graphics2D g, int width, int height){
         super.render(g, width, height);
         drawThing(g, this.floor, width, height);

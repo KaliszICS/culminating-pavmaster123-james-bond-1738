@@ -24,6 +24,7 @@ public class LevelFive extends Level{
     /**
      * The constructor of the fifth Level.
      */
+    @Override
     public LevelFive(){
         super(STARTING_X, STARTING_Y, LEVEL_ZOOM, BACKGROUND_COLOUR);
         initialiseLevel();
@@ -32,6 +33,7 @@ public class LevelFive extends Level{
     /**
      * Initializes Level five.
      */
+    @Override
     protected void initialiseLevel(){
         Save.load(this, "./levels/level5.txt");
         this.space.things.add(this.door);
@@ -41,6 +43,7 @@ public class LevelFive extends Level{
     /**
      * Updates the Level, called every game tick.
      */
+    @Override
     public void update(){
         super.update();
         this.door.update();
@@ -54,6 +57,7 @@ public class LevelFive extends Level{
      *     If the ID is 2, moves another door up.
      *     If the ID is 3, ends the Level.
      */
+    @Override
     public void buttonPressed(int buttonID){
         switch(buttonID){
             case 1: // move door up
@@ -76,6 +80,7 @@ public class LevelFive extends Level{
      * @param width The width of the screen.
      * @param height The height of the screen.
      */
+    @Override
     public void render(Graphics2D g, int width, int height){
         super.render(g, width, height);
         drawThing(g, this.floor, width, height);

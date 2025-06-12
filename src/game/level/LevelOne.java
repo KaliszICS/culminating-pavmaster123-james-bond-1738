@@ -32,6 +32,7 @@ public class LevelOne extends Level{
     /**
      * Initializes Level one.
      */
+    @Override
     protected void initialiseLevel(){
         Save.load(this, "./levels/level1.txt");
         this.space.things.add(this.door);
@@ -43,6 +44,7 @@ public class LevelOne extends Level{
      *     If the ID is 1, moves the door up.
      *     If the ID is 2, ends the Level.
      */
+    @Override
     public void buttonPressed(int buttonID){
         switch(buttonID){
             case 1: // move door up
@@ -59,6 +61,7 @@ public class LevelOne extends Level{
     /**
      * Restarts the level, usually called on the player's loss.
      */
+    @Override
     public void restart(){
         super.restart();
         this.door.reset();
@@ -67,6 +70,7 @@ public class LevelOne extends Level{
     /**
      * Updates the Level, called every game tick.
      */
+    @Override
     public void update(){
         super.update();
         this.door.update();
@@ -78,6 +82,7 @@ public class LevelOne extends Level{
      * @param width The width of the screen.
      * @param height The height of the screen.
      */
+    @Override
     public void render(Graphics2D g, int width, int height){
         super.render(g, width, height);
         drawThing(g, this.floor, width, height);

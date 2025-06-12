@@ -29,6 +29,7 @@ public class LevelFour extends Level{
     /**
      * Initializes Level four.
      */
+    @Override
     protected void initialiseLevel(){
         Save.load(this, "./levels/level4.txt");
     }
@@ -38,6 +39,7 @@ public class LevelFour extends Level{
      * @param buttonID The ID of the GameButton pressed.
      *     If the ID is 1, will end the Level.
      */
+    @Override
     public void buttonPressed(int buttonID){
         switch(buttonID){
             case 1: // end level
@@ -54,6 +56,7 @@ public class LevelFour extends Level{
      * @param width The width of the screen.
      * @param height The height of the screen.
      */
+    @Override
     public void render(Graphics2D g, int width, int height){
         super.render(g, width, height);
         drawThing(g, this.floor, width, height);
