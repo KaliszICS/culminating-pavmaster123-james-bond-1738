@@ -2,6 +2,7 @@ package game.level;
 
 /**
  * The Camera class, focuses on the Player and moves around the screen.
+ * @author Wayne Bai
  * @author Pavarasan Karunainathan
  */
 
