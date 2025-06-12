@@ -17,6 +17,7 @@ import game.menu.MainMenu;
 
 /**
  * The Game Window. Displays the current display set by GameState.
+ * @author Wayne Bai
  * @author Pavarasan Karunainathan
  */
 public class GameWindow extends Frame implements KeyListener, MouseListener, MouseMotionListener{
