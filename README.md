@@ -23,6 +23,7 @@ Default controls:
 - **W**: Jump
 - **A**: Move Left
 - **D**: Move Right
+- **Esc**: Leave the Level
 
 Controls can be customized in the Settings menu.
 
